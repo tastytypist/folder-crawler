@@ -4,8 +4,43 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:GUI"
-        mc:Ignorable="d"
+        mc:Ignorable="d" FontFamily="Eras ITC"
         Title="Folder Crawler" Height="450" Width="800">
+
+    <Window.Resources>
+        <Style TargetType="{x:Type Button}">
+            <Setter Property="Background" Value="Black" />
+            <Setter Property="Foreground" Value="White" />
+            <Setter Property="SnapsToDevicePixels" Value="True" />
+
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type Button}">
+                        <Border CornerRadius="4" Background="{TemplateBinding Background}" 
+                                Width="90" HorizontalAlignment="Left">
+                            <Grid>
+                                <ContentPresenter x:Name="MyContentPresenter" Content="{TemplateBinding Content}" 
+                                                  HorizontalAlignment="Center" VerticalAlignment="Center" 
+                                                  Margin="0 3 0 3"/>
+                            </Grid>
+                        </Border>
+
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Background" Value="#FF515151" />
+                                <Setter Property="Foreground" Value="White" />
+                            </Trigger>
+
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter Property="Background" Value="Gray" />
+                                <Setter Property="Foreground" Value="Black" />
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Window.Resources>
     
     <Grid>
         <Grid.ColumnDefinitions>
@@ -13,21 +48,24 @@
             <ColumnDefinition Width="*"/>
             <ColumnDefinition Width="20"/>
         </Grid.ColumnDefinitions>
-        
+
         <Grid.RowDefinitions>
             <RowDefinition Height="20"/>
             <RowDefinition Height="auto"/>
-            <RowDefinition Height="10"/>
+            <RowDefinition Height="20"/>
             <RowDefinition Height="*"/>
             <RowDefinition Height="20"/>
         </Grid.RowDefinitions>
-        
-        <TextBlock Grid.Column="1" Grid.Row="1" Text="Folder Crawler" 
-                   FontSize="24" HorizontalAlignment="Center"/>
 
-        <Grid Grid.Row="3" Grid.Column="1">
+        <TextBlock Grid.Column="1" Grid.Row="1" Text="Folder Crawler" 
+                   FontSize="24" HorizontalAlignment="Center" FontFamily="Stencil" FontWeight="Bold"/>
+
+        <Rectangle Grid.Column="1" Grid.Row="2" Height="3" Stroke="Black" Fill="Black"/>
+
+        <Grid Grid.Column="1" Grid.Row="3">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="1*"/>
+                <ColumnDefinition Width="30"/>
                 <ColumnDefinition Width="3*"/>
             </Grid.ColumnDefinitions>
 
@@ -36,13 +74,15 @@
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
 
-            <TextBlock Grid.Column="0" Grid.Row="0" Text="Input" 
-                   FontSize="18"/>
+            <TextBlock Grid.Column="0" Grid.Row="0" Margin="10 0 10 0" Text="Input" 
+                   FontSize="20" FontWeight="Bold"/>
 
-            <TextBlock Grid.Column="1" Grid.Row="0" Text="Output" 
-                   FontSize="18" HorizontalAlignment="Center"/>
+            <Rectangle Grid.Column="1" Grid.RowSpan="2" Width="3" Stroke="Black" Fill="Black"/>
 
-            <Grid Grid.Row="1" Grid.Column="0">
+            <TextBlock Grid.Column="2" Grid.Row="0" Margin="10 0 10 0" Text="Output" 
+                   FontSize="20" HorizontalAlignment="Center" FontWeight="Bold"/>
+
+            <Grid Grid.Column="0" Grid.Row="1" Margin="10 0 5 0">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="auto"/>
                     <RowDefinition Height="auto"/>
@@ -55,41 +95,61 @@
                     <RowDefinition Height="auto"/>
                 </Grid.RowDefinitions>
 
-                <TextBlock Grid.Row="0" Text="Choose Starting Directory"/>
+                <TextBlock Grid.Row="0" Text="Choose Starting Directory"
+                           Margin="0 10 0 3"/>
 
-                <Button Grid.Row="1" Content="Choose folder" />
+                <Button Grid.Row="1" Content="Choose folder" 
+                        Name="btnChooseFolder" Click="btnChooseFolder_Click"/>
 
-                <TextBlock Grid.Row="2" Text="Input File Name"/>
+                <TextBlock Grid.Row="2" Text="Input File Name"
+                           Margin="0 10 0 3"/>
 
                 <TextBox Grid.Row="3"/>
 
-                <CheckBox Grid.Row="4" Content="Find all occurence"/>
+                <CheckBox Grid.Row="4" Content="Find all occurence"
+                          Margin="0 10 0 0"/>
 
-                <TextBlock Grid.Row="5" Text="Input Searching Method"/>
+                <TextBlock Grid.Row="5" Text="Choose Searching Method"
+                           Margin="0 10 0 3"/>
 
                 <RadioButton Grid.Row="6" Content="BFS"/>
 
                 <RadioButton Grid.Row="7" Content="DFS"/>
 
-                <Button Grid.Row="8" Content="Search"/>
+                <Button Grid.Row="8" Margin="0 20 0 0">
+                    <DockPanel LastChildFill="True">
+                        <Image DockPanel.Dock="Left" Height="10" Margin="0 0 5 0"
+                               Source="https://icon-library.com/images/search-icon-white/search-icon-white-16.jpg"/>
+                        <TextBlock>Search</TextBlock>
+                    </DockPanel>
+                </Button>
             </Grid>
 
-            <Grid Grid.Row="1" Grid.Column="1">
+            <Grid Grid.Column="2" Grid.Row="1" Margin="5 0 10 0">
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="*"/>
                     <RowDefinition Height="auto"/>
                     <RowDefinition Height="auto"/>
                     <RowDefinition Height="auto"/>
                 </Grid.RowDefinitions>
 
-                <Image Grid.Row="0"/>
+                <Image Grid.Row="0"
+                       Margin="0 10 0 10"/>
 
-                <TextBlock Grid.Row="1" Text="Path File:"/>
+                <Rectangle Grid.Row="0" Margin="0 10 0 10"
+                           Stroke="Black" Fill="Gray"
+                           Height="auto" RadiusX="5" RadiusY="5"/>
+
+                <TextBlock Grid.Row="1" Text="Path File:"
+                           Margin="0 0 0 3"/>
 
                 
-                
-                <TextBlock Grid.Row="3" Text="Time Spent:"/>
+
+                <TextBlock Grid.Row="3" Text="Time Spent:"
+                           Margin="0 10 0 0"/>
             </Grid>
         </Grid>
+
+        <Rectangle Grid.Column="1" Grid.Row="4" Height="3" Stroke="Black" Fill="Black"/>
     </Grid>
 </Window>

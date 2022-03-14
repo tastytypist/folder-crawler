@@ -5,14 +5,7 @@
     <TargetFramework>net6.0-windows</TargetFramework>
     <Nullable>enable</Nullable>
     <UseWPF>true</UseWPF>
+	  <UseWindowsForms>true</UseWindowsForms>
   </PropertyGroup>
-
-  <ItemGroup>
-    <None Remove="logo_itb_1024.png" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Resource Include="logo_itb_1024.png" />
-  </ItemGroup>
 
 </Project>
