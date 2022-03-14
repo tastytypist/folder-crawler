@@ -1,6 +1,7 @@
 ﻿using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -26,24 +27,26 @@ namespace GUI
         public MainWindow()
         {
             InitializeComponent();
+            this.DataContext = this;
         }
 
         private void btnChooseFolder_Click(object sender, RoutedEventArgs e)
         {
             var openFolderDialog = new FolderBrowserDialog();
             openFolderDialog.ShowDialog();
-            //    txtEditor.Text = File.ReadAllText(openFileDialog.FileName);
+            StartDirectory.Text = openFolderDialog.SelectedPath;
         }
 
-        /*private void ShowOpenFolderDialog()
+        private void btnSearch_Click(object sender, RoutedEventArgs e)
         {
-            RadOpenFolderDialog openFolderDialog = new RadOpenFolderDialog();
-            openFolderDialog.Owner = this;
-            openFolderDialog.ShowDialog();
-            if (openFolderDialog.DialogResult == true)
-            {
-                string folderName = openFolderDialog.FileName;
-            }
-        }*/
+
+        }
+
+        private void pathFile_Click(object sender, RoutedEventArgs e)
+        {
+            // Sementara
+            var appPath = System.AppDomain.CurrentDomain.BaseDirectory;
+            System.Diagnostics.Process.Start(appPath);
+        }
     }
 }
