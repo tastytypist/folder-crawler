@@ -1,0 +1,95 @@
+﻿<Window x:Class="GUI.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:GUI"
+        mc:Ignorable="d"
+        Title="Folder Crawler" Height="450" Width="800">
+    
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="20"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="20"/>
+        </Grid.ColumnDefinitions>
+        
+        <Grid.RowDefinitions>
+            <RowDefinition Height="20"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="10"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="20"/>
+        </Grid.RowDefinitions>
+        
+        <TextBlock Grid.Column="1" Grid.Row="1" Text="Folder Crawler" 
+                   FontSize="24" HorizontalAlignment="Center"/>
+
+        <Grid Grid.Row="3" Grid.Column="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="1*"/>
+                <ColumnDefinition Width="3*"/>
+            </Grid.ColumnDefinitions>
+
+            <Grid.RowDefinitions>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+
+            <TextBlock Grid.Column="0" Grid.Row="0" Text="Input" 
+                   FontSize="18"/>
+
+            <TextBlock Grid.Column="1" Grid.Row="0" Text="Output" 
+                   FontSize="18" HorizontalAlignment="Center"/>
+
+            <Grid Grid.Row="1" Grid.Column="0">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="auto"/>
+                </Grid.RowDefinitions>
+
+                <TextBlock Grid.Row="0" Text="Choose Starting Directory"/>
+
+                <Button Grid.Row="1" Content="Choose folder" />
+
+                <TextBlock Grid.Row="2" Text="Input File Name"/>
+
+                <TextBox Grid.Row="3"/>
+
+                <CheckBox Grid.Row="4" Content="Find all occurence"/>
+
+                <TextBlock Grid.Row="5" Text="Input Searching Method"/>
+
+                <RadioButton Grid.Row="6" Content="BFS"/>
+
+                <RadioButton Grid.Row="7" Content="DFS"/>
+
+                <Button Grid.Row="8" Content="Search"/>
+            </Grid>
+
+            <Grid Grid.Row="1" Grid.Column="1">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="auto"/>
+                </Grid.RowDefinitions>
+
+                <Image Grid.Row="0"/>
+
+                <TextBlock Grid.Row="1" Text="Path File:"/>
+
+                
+                
+                <TextBlock Grid.Row="3" Text="Time Spent:"/>
+            </Grid>
+        </Grid>
+    </Grid>
+</Window>
