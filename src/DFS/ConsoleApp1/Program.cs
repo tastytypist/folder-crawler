@@ -8,7 +8,7 @@ namespace DFS
 
     class CopyDir
     {
-        public static NTree<string> searchFolder(DirectoryInfo source, string target)
+        public static NTree<string> searchFolder(DirectoryInfo source, string target,List<string> path)
         {
             // Check if the target directory exists, if not, create it.
 
@@ -22,7 +22,7 @@ namespace DFS
             foreach (DirectoryInfo diSourceSubDir in source.GetDirectories())
             {
 
-                NTree<string> file = searchFolder(diSourceSubDir, target);
+                NTree<string> file = searchFolder(diSourceSubDir, target,path);
                 tree.children.AddLast(file); 
              //   if (file!= "")
              //    {
@@ -35,7 +35,7 @@ namespace DFS
                 tree.AddChild(fi.FullName);
                 if (fi.Name == target)
                 {
-                    return tree;
+                    path.Add(fi.FullName);
                 }
             }
             return tree;
@@ -88,14 +88,16 @@ namespace DFS
         {
             string sourceDirectory = @"D:\Game";
             string targetDirectory = @"Battlefield 1.rar";
-
+            List<string> path = new List<string>();
             DirectoryInfo diSource = new DirectoryInfo(sourceDirectory);
             //    FileInfo diTarget = new FileInfo(targetDirectory);
 
-            NTree<string> cari = CopyDir.searchFolder(diSource, targetDirectory);
+            NTree<string> cari = CopyDir.searchFolder(diSource, targetDirectory,path);
             cari.Traverse(cari,1);
-        //    Console.WriteLine(cari);
-        //    FileInfo diTarget = new FileInfo(cari);
+            Console.WriteLine(path[0]);
+            Console.WriteLine(path[1]);
+            //    Console.WriteLine(cari);
+            //    FileInfo diTarget = new FileInfo(cari);
             Console.ReadLine();
             // Create a tree.
             
