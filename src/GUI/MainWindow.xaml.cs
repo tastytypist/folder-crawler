@@ -31,20 +31,20 @@ namespace GUI
             this.DataContext = this;
         }
 
-        private void btnChooseFolder_Click(object sender, RoutedEventArgs e)
+        private void BtnChooseFolder_Click(object sender, RoutedEventArgs e)
         {
             var openFolderDialog = new FolderBrowserDialog();
             openFolderDialog.ShowDialog();
             startDirectory.Text = openFolderDialog.SelectedPath;
         }
 
-        private void btnSearch_Click(object sender, RoutedEventArgs e)
+        private void BtnSearch_Click(object sender, RoutedEventArgs e)
         {
-            clearOutputScreen();
+            ClearOutputScreen();
 
             string start = startDirectory.Text;                     // Nama strating directory
             string fileName = ipFileName.Text;                      // Nama file yang ingin dicari
-            bool Occurence = (bool) ipFindAllOccurence.IsChecked;   // Mode pencarian (semua kemunculan (true) / kemunculan pertama (false))
+            bool Occurence = ipFindAllOccurence.IsChecked.HasValue; // Mode pencarian (semua kemunculan (true) / kemunculan pertama (false))
             
             Stopwatch stopWatch = new Stopwatch();
             stopWatch.Start();
@@ -61,11 +61,18 @@ namespace GUI
             stopWatch.Stop();
 
             // Output
-            opPathList.Items.Add(@"C:\");   // Contoh, parameter string bisa diganti dengan directory hasil pencarian
+            // Sementara
+            string treePath = @"D:\Personal\OneDrive - Institut Teknologi Bandung\Documents\Programming\GitHub\folder-crawler\src\GUI\dummy.png";
+            string[] resultPath = {@"C:\"};
+            tree.Source = new BitmapImage(new Uri(treePath));
+            for (int i = 0; i < resultPath.Length; i++)
+            {
+                opPathList.Items.Add(resultPath[i]);   // Contoh, parameter string bisa diganti dengan directory hasil pencarian
+            }
             opTimeSpent.Text += stopWatch.ElapsedMilliseconds.ToString() + " ms";
         }
 
-        private void pathFile_Click(object sender, RoutedEventArgs e)
+        private void PathFile_Click(object sender, RoutedEventArgs e)
         {
             // Sementara
             for (int i = 0; i < opPathList.Items.Count; i++)
@@ -76,7 +83,7 @@ namespace GUI
             }
         }
 
-        private void clearOutputScreen()
+        private void ClearOutputScreen()
         {
             opPathList.Items.Clear();
             opTimeSpent.Text = "Time Spent: ";

@@ -100,7 +100,7 @@
 
                 <DockPanel Grid.Row="1">
                     <Button x:Name="btnChooseFolder" Content="Choose folder"  
-                            Click="btnChooseFolder_Click"/>
+                            Click="BtnChooseFolder_Click"/>
                     <TextBlock x:Name="startDirectory" 
                                Margin="5 0 0 0" VerticalAlignment="Center"/>
                 </DockPanel>
@@ -125,7 +125,7 @@
                              Content="DFS"/>
 
                 <Button Grid.Row="8" x:Name="btnSearch" 
-                        Click="btnSearch_Click" Margin="0 20 0 0">
+                        Click="BtnSearch_Click" Margin="0 20 0 0">
                     <DockPanel LastChildFill="True">
                         <Image DockPanel.Dock="Left" Height="10" Margin="0 0 5 0"
                                Source="https://icon-library.com/images/search-icon-white/search-icon-white-16.jpg"/>
@@ -142,17 +142,17 @@
                     <RowDefinition Height="auto"/>
                 </Grid.RowDefinitions>
 
-                <Image Grid.Row="0"
-                       Margin="0 10 0 10"/>
-
                 <Rectangle Grid.Row="0" Margin="0 10 0 10"
                            Stroke="Black" Fill="Gray"
                            Height="auto" RadiusX="5" RadiusY="5"/>
 
+                <Image Grid.Row="0" x:Name="tree"
+                       Height="auto" Width="auto" Margin="10 20 10 20"/>
+
                 <TextBlock Grid.Row="1" Text="Path File:"
                            Margin="0 0 0 3"/>
 
-                <ListBox Grid.Row="2" x:Name="opPathList" MouseDoubleClick="pathFile_Click"/>
+                <ListBox Grid.Row="2" x:Name="opPathList" MouseDoubleClick="PathFile_Click"/>
 
                 <TextBlock Grid.Row="3" x:Name="opTimeSpent"
                            Text="Time Spent: " Margin="0 10 0 0"/>
