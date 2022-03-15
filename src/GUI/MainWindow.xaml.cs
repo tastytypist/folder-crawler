@@ -17,6 +17,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using DFS;
 
 namespace GUI
 {
@@ -45,8 +46,10 @@ namespace GUI
             string start = startDirectory.Text;                     // Nama strating directory
             string fileName = ipFileName.Text;                      // Nama file yang ingin dicari
             bool Occurence = ipFindAllOccurence.IsChecked.HasValue; // Mode pencarian (semua kemunculan (true) / kemunculan pertama (false))
-            
             Stopwatch stopWatch = new Stopwatch();
+            DirectoryInfo diSource = new DirectoryInfo(start);
+            List<string> path = new List<string>();
+            
             stopWatch.Start();
             if (btnBFS.IsChecked == true)
             {
@@ -56,6 +59,7 @@ namespace GUI
             else if (btnDFS.IsChecked == true)
             {
                 // ALGORITMA DFS
+                NTree<string> pohon = SearchDir.searchFolder(diSource, fileName, path);
 
             }
             stopWatch.Stop();
@@ -64,10 +68,10 @@ namespace GUI
             // Sementara
             string treePath = @"D:\Personal\OneDrive - Institut Teknologi Bandung\Documents\Programming\GitHub\folder-crawler\src\GUI\dummy.png";
             string[] resultPath = {@"C:\"};
-            tree.Source = new BitmapImage(new Uri(treePath));
-            for (int i = 0; i < resultPath.Length; i++)
+            //tree.Source = new BitmapImage(new Uri(testPath));
+            for (int i = 0; i < path.Count; i++)
             {
-                opPathList.Items.Add(resultPath[i]);   // Contoh, parameter string bisa diganti dengan directory hasil pencarian
+                opPathList.Items.Add(path[i]);   // Contoh, parameter string bisa diganti dengan directory hasil pencarian
             }
             opTimeSpent.Text += stopWatch.ElapsedMilliseconds.ToString() + " ms";
         }
