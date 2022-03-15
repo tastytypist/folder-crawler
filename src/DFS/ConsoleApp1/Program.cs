@@ -6,7 +6,7 @@ namespace DFS
     using System.IO;
     using System.Collections.Generic;
 
-    class CopyDir
+    public class SearchDir
     {
         public static NTree<string> searchFolder(DirectoryInfo source, string target,List<string> path)
         {
@@ -48,7 +48,7 @@ namespace DFS
 
     //elegate void TreeVisitor<T>(T nodeData);
 
-    class NTree<T>
+    public class NTree<T>
     {
         public T data;
         public LinkedList<NTree<T>> children;
@@ -92,7 +92,7 @@ namespace DFS
             DirectoryInfo diSource = new DirectoryInfo(sourceDirectory);
             //    FileInfo diTarget = new FileInfo(targetDirectory);
 
-            NTree<string> cari = CopyDir.searchFolder(diSource, targetDirectory,path);
+            NTree<string> cari = SearchDir.searchFolder(diSource, targetDirectory,path);
             cari.Traverse(cari,1);
             Console.WriteLine(path[0]);
             Console.WriteLine(path[1]);
