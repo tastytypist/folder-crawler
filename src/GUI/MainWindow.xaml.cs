@@ -62,6 +62,7 @@ namespace GUI
             {
                 // ALGORITMA DFS
                 NTree<string> pohon = SearchDir.searchFolder(diSource, fileName, path);
+                ViewerSample.testGraph(pohon);
             }
             stopWatch.Stop();
 
@@ -76,6 +77,7 @@ namespace GUI
             }
             // Menampilkan waktu yang diperlukan selama pencarian
             opTimeSpent.Text += stopWatch.ElapsedMilliseconds.ToString() + " ms";
+            
         }
 
         private void PathFile_Click(object sender, RoutedEventArgs e)
@@ -94,10 +96,11 @@ namespace GUI
             opPathList.Items.Clear();
             opTimeSpent.Text = "Time Spent: ";
         }
+        
     }
     class ViewerSample
     {
-        public static void Main()
+        public static void drawGraph()
         {
             //create a form 
             System.Windows.Forms.Form form = new System.Windows.Forms.Form();
@@ -109,6 +112,7 @@ namespace GUI
             graph.AddEdge("A", "B");
             graph.AddEdge("B", "C");
             graph.AddEdge("A", "C").Attr.Color = Microsoft.Msagl.Drawing.Color.Green;
+            graph.AddEdge("B", "D").Attr.Color = Microsoft.Msagl.Drawing.Color.Aqua;
             graph.FindNode("A").Attr.FillColor = Microsoft.Msagl.Drawing.Color.Magenta;
             graph.FindNode("B").Attr.FillColor = Microsoft.Msagl.Drawing.Color.MistyRose;
             Microsoft.Msagl.Drawing.Node c = graph.FindNode("C");
@@ -123,6 +127,39 @@ namespace GUI
             form.ResumeLayout();
             //show the form 
             form.ShowDialog();
+        }
+        public static void testGraph(NTree<string> tree)
+        {
+            //create a form 
+            System.Windows.Forms.Form form = new System.Windows.Forms.Form();
+            //create a viewer object 
+            Microsoft.Msagl.GraphViewerGdi.GViewer viewer = new Microsoft.Msagl.GraphViewerGdi.GViewer();
+            //create a graph object 
+            Microsoft.Msagl.Drawing.Graph graph = new Microsoft.Msagl.Drawing.Graph("graph");
+            //create the graph content 
+            graph = createTree(graph, tree);
+            //bind the graph to the viewer 
+            viewer.Graph = graph;
+            //associate the viewer with the form 
+            form.SuspendLayout();
+            viewer.Dock = System.Windows.Forms.DockStyle.Fill;
+            form.Controls.Add(viewer);
+            form.ResumeLayout();
+            //show the form 
+            form.ShowDialog();
+        }
+        public static Microsoft.Msagl.Drawing.Graph createTree(Microsoft.Msagl.Drawing.Graph graph, NTree<string> tree)
+        {
+            graph.AddEdge("A", "B");
+            graph.AddEdge("B", "C");
+            graph.AddEdge("A", "C").Attr.Color = Microsoft.Msagl.Drawing.Color.Green;
+            graph.AddEdge("B", "D").Attr.Color = Microsoft.Msagl.Drawing.Color.Aqua;
+            graph.FindNode("A").Attr.FillColor = Microsoft.Msagl.Drawing.Color.Magenta;
+            graph.FindNode("B").Attr.FillColor = Microsoft.Msagl.Drawing.Color.MistyRose;
+            Microsoft.Msagl.Drawing.Node c = graph.FindNode("C");
+            c.Attr.FillColor = Microsoft.Msagl.Drawing.Color.PaleGreen;
+            c.Attr.Shape = Microsoft.Msagl.Drawing.Shape.Diamond;
+            return graph;
         }
     }
 }
