@@ -43,12 +43,14 @@ namespace GUI
         {
             ClearOutputScreen();
 
-            string start = startDirectory.Text;                     // Nama strating directory
+            string start = startDirectory.Text;                     // Nama starting directory
             string fileName = ipFileName.Text;                      // Nama file yang ingin dicari
             bool Occurence = ipFindAllOccurence.IsChecked.HasValue; // Mode pencarian (semua kemunculan (true) / kemunculan pertama (false))
+            
             Stopwatch stopWatch = new Stopwatch();
-            DirectoryInfo diSource = new DirectoryInfo(start);
-            List<string> path = new List<string>();
+
+            DirectoryInfo diSource = new DirectoryInfo(start);      // Strating directory
+            List<string> path = new List<string>();                 // List berisi path file yang dicari (result)
             
             stopWatch.Start();
             if (btnBFS.IsChecked == true)
@@ -60,19 +62,19 @@ namespace GUI
             {
                 // ALGORITMA DFS
                 NTree<string> pohon = SearchDir.searchFolder(diSource, fileName, path);
-
             }
             stopWatch.Stop();
 
-            // Output
-            // Sementara
-            string treePath = @"D:\Personal\OneDrive - Institut Teknologi Bandung\Documents\Programming\GitHub\folder-crawler\src\GUI\dummy.png";
-            string[] resultPath = {@"C:\"};
-            //tree.Source = new BitmapImage(new Uri(testPath));
+            /* Output */
+            // Menampilkan gambar pohon (Sementara)
+            //string gambarPohon = @"D:\Personal\OneDrive - Institut Teknologi Bandung\Documents\Programming\GitHub\folder-crawler\src\GUI\dummy.png";
+            //opTreeVisual.Source = new BitmapImage(new Uri(gambarPohon));
+            // Menampilkan path dari file yang dicari
             for (int i = 0; i < path.Count; i++)
             {
-                opPathList.Items.Add(path[i]);   // Contoh, parameter string bisa diganti dengan directory hasil pencarian
+                opPathList.Items.Add(path[i]);
             }
+            // Menampilkan waktu yang diperlukan selama pencarian
             opTimeSpent.Text += stopWatch.ElapsedMilliseconds.ToString() + " ms";
         }
 

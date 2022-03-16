@@ -146,7 +146,7 @@
                            Stroke="Black" Fill="Gray"
                            Height="auto" RadiusX="5" RadiusY="5"/>
 
-                <Image Grid.Row="0" x:Name="tree"
+                <Image Grid.Row="0" x:Name="opTreeVisual"
                        Height="auto" Width="auto" Margin="10 20 10 20"/>
 
                 <TextBlock Grid.Row="1" Text="Path File:"
