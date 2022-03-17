@@ -57,7 +57,7 @@ namespace GUI
 
                 DirectoryInfo diSource = new DirectoryInfo(start);      // Strating directory
                 List<string> path = new List<string>();                 // List berisi path file yang dicari (result)
-                NTree<string> pohon = new NTree<string>(diSource.FullName);
+                NTree<string> pohon = new NTree<string>(diSource.FullName,0);
                 stopWatch.Start();
                 if (btnBFS.IsChecked == true)
                 {
@@ -67,7 +67,9 @@ namespace GUI
                 else if (btnDFS.IsChecked == true)
                 {
                     // ALGORITMA DFS
-                    pohon = SearchDir.searchFolder(diSource, fileName, path);
+                    Occurence = true;
+                    bool found = false;
+                    pohon = SearchDir.searchFolder(diSource, fileName, path,out found,Occurence);
                     
                 }
                 stopWatch.Stop();
@@ -177,11 +179,13 @@ namespace GUI
             foreach (NTree<string> kid in tree.children)
             {
                 graph.AddEdge(tree.data, kid.data);
-                graph.FindNode(kid.data).Attr.FillColor = Microsoft.Msagl.Drawing.Color.Cyan;
+                if (kid.colour == 1) graph.FindNode(kid.data).Attr.FillColor = Microsoft.Msagl.Drawing.Color.Blue;
+                else if (kid.colour == 0) graph.FindNode(kid.data).Attr.FillColor = Microsoft.Msagl.Drawing.Color.Red;
                 createTree(graph, kid);
 
             }
-            graph.FindNode(tree.data).Attr.FillColor = Microsoft.Msagl.Drawing.Color.Cyan;
+            if (tree.colour == 1) graph.FindNode(tree.data).Attr.FillColor = Microsoft.Msagl.Drawing.Color.Blue;
+            else if (tree.colour == 0) graph.FindNode(tree.data).Attr.FillColor = Microsoft.Msagl.Drawing.Color.Red;
 
             return graph;
         }
