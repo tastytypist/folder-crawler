@@ -33,6 +33,7 @@ namespace GUI
         }
 
         private void BtnChooseFolder_Click(object sender, RoutedEventArgs e)
+        // Menampilkan window file explorer ketika menekan tombol search
         {
             var openFolderDialog = new FolderBrowserDialog();
             openFolderDialog.ShowDialog();
@@ -40,59 +41,71 @@ namespace GUI
         }
 
         private void BtnSearch_Click(object sender, RoutedEventArgs e)
+        // Mengeksekusi program ketika menekan submit
         {
-            ClearOutputScreen();
-
-            string start = startDirectory.Text;                     // Nama starting directory
-            string fileName = ipFileName.Text;                      // Nama file yang ingin dicari
-            bool Occurence = ipFindAllOccurence.IsChecked.HasValue; // Mode pencarian (semua kemunculan (true) / kemunculan pertama (false))
-            
-            Stopwatch stopWatch = new Stopwatch();
-
-            DirectoryInfo diSource = new DirectoryInfo(start);      // Strating directory
-            List<string> path = new List<string>();                 // List berisi path file yang dicari (result)
-            
-            stopWatch.Start();
-            if (btnBFS.IsChecked == true)
+            bool inputValid = !string.IsNullOrEmpty(startDirectory.Text) && !string.IsNullOrWhiteSpace(startDirectory.Text) && Directory.Exists(startDirectory.Text)
+                            && !string.IsNullOrEmpty(ipFileName.Text) && (btnBFS.IsChecked.HasValue == true || btnDFS.IsChecked.HasValue == true);
+            if (inputValid)
             {
-                // ALGORITMA BFS
-                
-            } 
-            else if (btnDFS.IsChecked == true)
-            {
-                // ALGORITMA DFS
-                NTree<string> pohon = SearchDir.searchFolder(diSource, fileName, path);
-                ViewerSample.testGraph(pohon);
+                ClearOutputScreen();
+
+                string start = startDirectory.Text;                     // Nama starting directory
+                string fileName = ipFileName.Text;                      // Nama file yang ingin dicari
+                bool Occurence = ipFindAllOccurence.IsChecked.HasValue; // Mode pencarian (semua kemunculan (true) / kemunculan pertama (false))
+
+                Stopwatch stopWatch = new Stopwatch();
+
+                DirectoryInfo diSource = new DirectoryInfo(start);      // Strating directory
+                List<string> path = new List<string>();                 // List berisi path file yang dicari (result)
+
+                stopWatch.Start();
+                if (btnBFS.IsChecked == true)
+                {
+                    // ALGORITMA BFS
+
+                }
+                else if (btnDFS.IsChecked == true)
+                {
+                    // ALGORITMA DFS
+                    NTree<string> pohon = SearchDir.searchFolder(diSource, fileName, path);
+                    ViewerSample.testGraph(pohon);
+                }
+                stopWatch.Stop();
+
+                /* Output */
+                // Menampilkan gambar pohon (Sementara)
+                //string gambarPohon = @"D:\Personal\OneDrive - Institut Teknologi Bandung\Documents\Programming\GitHub\folder-crawler\src\GUI\dummy.png";
+                //opTreeVisual.Source = new BitmapImage(new Uri(gambarPohon));
+                // Menampilkan path dari file yang dicari
+                textBlockPathList.Text += " (Double click to open folder)";
+                for (int i = 0; i < path.Count; i++)
+                {
+                    opPathList.Items.Add(path[i]);
+                }
+                // Menampilkan waktu yang diperlukan selama pencarian
+                opTimeSpent.Text += stopWatch.ElapsedMilliseconds.ToString() + " ms";
             }
-            stopWatch.Stop();
 
-            /* Output */
-            // Menampilkan gambar pohon (Sementara)
-            //string gambarPohon = @"D:\Personal\OneDrive - Institut Teknologi Bandung\Documents\Programming\GitHub\folder-crawler\src\GUI\dummy.png";
-            //opTreeVisual.Source = new BitmapImage(new Uri(gambarPohon));
-            // Menampilkan path dari file yang dicari
-            for (int i = 0; i < path.Count; i++)
-            {
-                opPathList.Items.Add(path[i]);
-            }
-            // Menampilkan waktu yang diperlukan selama pencarian
-            opTimeSpent.Text += stopWatch.ElapsedMilliseconds.ToString() + " ms";
-            
         }
 
         private void PathFile_Click(object sender, RoutedEventArgs e)
+        // Hyperlink ke path file yang diklik
         {
-            // Sementara
-            for (int i = 0; i < opPathList.Items.Count; i++)
+            if (opPathList.SelectedItem != null)
             {
-                //var appPath1 = System.AppDomain.CurrentDomain.BaseDirectory;
-                var appPath = opPathList.Items[i].ToString();
-                Process.Start(appPath);
+                string filePath = opPathList.SelectedItem.ToString();
+                string folderPath = new DirectoryInfo(System.IO.Path.GetDirectoryName(filePath)).FullName;
+                if (Directory.Exists(folderPath))
+                {
+                    Process.Start(Environment.GetEnvironmentVariable("WINDIR") + @"\explorer.exe", folderPath);
+                }
             }
         }
 
         private void ClearOutputScreen()
+        // Inisialisasi output screen (hapus semua value)
         {
+            opTreeVisual.Source = null;
             opPathList.Items.Clear();
             opTimeSpent.Text = "Time Spent: ";
         }

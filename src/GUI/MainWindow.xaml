@@ -146,11 +146,13 @@
                            Stroke="Black" Fill="Gray"
                            Height="auto" RadiusX="5" RadiusY="5"/>
 
+                <WindowsFormsHost Grid.Row="0" x:Name="formTree"/>
+
                 <Image Grid.Row="0" x:Name="opTreeVisual"
                        Height="auto" Width="auto" Margin="10 20 10 20"/>
 
-                <TextBlock Grid.Row="1" Text="Path File:"
-                           Margin="0 0 0 3"/>
+                <TextBlock Grid.Row="1" x:Name="textBlockPathList" 
+                           Text="Path File:" Margin="0 0 0 3"/>
 
                 <ListBox Grid.Row="2" x:Name="opPathList" MouseDoubleClick="PathFile_Click"/>
 
