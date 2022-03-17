@@ -178,7 +178,7 @@ namespace GUI
             {
                 graph.AddEdge(tree.data, kid.data);
                 graph.FindNode(kid.data).Attr.FillColor = Microsoft.Msagl.Drawing.Color.Cyan;
-                //createTree(graph, kid);
+                createTree(graph, kid);
 
             }
             graph.FindNode(tree.data).Attr.FillColor = Microsoft.Msagl.Drawing.Color.Cyan;
