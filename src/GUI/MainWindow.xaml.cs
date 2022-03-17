@@ -44,14 +44,14 @@ namespace GUI
         // Mengeksekusi program ketika menekan submit
         {
             bool inputValid = !string.IsNullOrEmpty(startDirectory.Text) && !string.IsNullOrWhiteSpace(startDirectory.Text) && Directory.Exists(startDirectory.Text)
-                            && !string.IsNullOrEmpty(ipFileName.Text) && (btnBFS.IsChecked.HasValue == true || btnDFS.IsChecked.HasValue == true);
+                            && !string.IsNullOrEmpty(ipFileName.Text) && (btnBFS.IsChecked == true || btnDFS.IsChecked == true);
             if (inputValid)
             {
                 ClearOutputScreen();
 
                 string start = startDirectory.Text;                     // Nama starting directory
                 string fileName = ipFileName.Text;                      // Nama file yang ingin dicari
-                bool Occurence = ipFindAllOccurence.IsChecked.HasValue; // Mode pencarian (semua kemunculan (true) / kemunculan pertama (false))
+                bool Occurence = (bool) ipFindAllOccurence.IsChecked; // Mode pencarian (semua kemunculan (true) / kemunculan pertama (false))
 
                 Stopwatch stopWatch = new Stopwatch();
 
@@ -67,7 +67,6 @@ namespace GUI
                 else if (btnDFS.IsChecked == true)
                 {
                     // ALGORITMA DFS
-                    Occurence = true;
                     bool found = false;
                     pohon = SearchDir.searchFolder(diSource, fileName, path,out found,Occurence);
                     
@@ -79,7 +78,10 @@ namespace GUI
                 //string gambarPohon = @"D:\Personal\OneDrive - Institut Teknologi Bandung\Documents\Programming\GitHub\folder-crawler\src\GUI\dummy.png";
                 //opTreeVisual.Source = new BitmapImage(new Uri(gambarPohon));
                 // Menampilkan path dari file yang dicari
-                textBlockPathList.Text += " (Double click to open folder)";
+                if (path.Count > 0)
+                {
+                    textBlockPathList.Text += " (Double click to open folder)";
+                }    
                 for (int i = 0; i < path.Count; i++)
                 {
                     opPathList.Items.Add(path[i]);
@@ -109,6 +111,7 @@ namespace GUI
         // Inisialisasi output screen (hapus semua value)
         {
             opTreeVisual.Source = null;
+            textBlockPathList.Text = "Path List:";
             opPathList.Items.Clear();
             opTimeSpent.Text = "Time Spent: ";
         }
@@ -161,7 +164,7 @@ namespace GUI
             viewer.Dock = System.Windows.Forms.DockStyle.Fill;
             form.Controls.Add(viewer);
             form.ResumeLayout();
-            //show the form 
+            //show the form
             form.ShowDialog();
         }
         public static Microsoft.Msagl.Drawing.Graph createTree(Microsoft.Msagl.Drawing.Graph graph, NTree<string> tree)
