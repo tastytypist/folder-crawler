@@ -57,7 +57,7 @@ namespace GUI
 
                 DirectoryInfo diSource = new DirectoryInfo(start);      // Strating directory
                 List<string> path = new List<string>();                 // List berisi path file yang dicari (result)
-
+                NTree<string> pohon = new NTree<string>(diSource.FullName);
                 stopWatch.Start();
                 if (btnBFS.IsChecked == true)
                 {
@@ -67,8 +67,8 @@ namespace GUI
                 else if (btnDFS.IsChecked == true)
                 {
                     // ALGORITMA DFS
-                    NTree<string> pohon = SearchDir.searchFolder(diSource, fileName, path);
-                    ViewerSample.testGraph(pohon);
+                    pohon = SearchDir.searchFolder(diSource, fileName, path);
+                    
                 }
                 stopWatch.Stop();
 
@@ -84,6 +84,7 @@ namespace GUI
                 }
                 // Menampilkan waktu yang diperlukan selama pencarian
                 opTimeSpent.Text += stopWatch.ElapsedMilliseconds.ToString() + " ms";
+                ViewerSample.testGraph(pohon);
             }
 
         }
@@ -163,6 +164,7 @@ namespace GUI
         }
         public static Microsoft.Msagl.Drawing.Graph createTree(Microsoft.Msagl.Drawing.Graph graph, NTree<string> tree)
         {
+            /*
             graph.AddEdge("A", "B");
             graph.AddEdge("B", "C");
             graph.AddEdge("A", "C").Attr.Color = Microsoft.Msagl.Drawing.Color.Green;
@@ -171,7 +173,16 @@ namespace GUI
             graph.FindNode("B").Attr.FillColor = Microsoft.Msagl.Drawing.Color.MistyRose;
             Microsoft.Msagl.Drawing.Node c = graph.FindNode("C");
             c.Attr.FillColor = Microsoft.Msagl.Drawing.Color.PaleGreen;
-            c.Attr.Shape = Microsoft.Msagl.Drawing.Shape.Diamond;
+            c.Attr.Shape = Microsoft.Msagl.Drawing.Shape.Diamond;*/
+            foreach (NTree<string> kid in tree.children)
+            {
+                graph.AddEdge(tree.data, kid.data);
+                graph.FindNode(kid.data).Attr.FillColor = Microsoft.Msagl.Drawing.Color.Cyan;
+                //createTree(graph, kid);
+
+            }
+            graph.FindNode(tree.data).Attr.FillColor = Microsoft.Msagl.Drawing.Color.Cyan;
+
             return graph;
         }
     }

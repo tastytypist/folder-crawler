@@ -14,7 +14,7 @@ namespace DFS
 
             // Copy each file into it's new directory.
 
-            NTree<string> tree = new NTree<string>(source.FullName) ;
+            NTree<string> tree = new NTree<string>(source.Name) ;
         
 
             // Copy each subdirectory using recursion.
@@ -32,7 +32,7 @@ namespace DFS
             foreach (FileInfo fi in source.GetFiles())
             {
                 //Console.WriteLine(fi);
-                tree.AddChild(fi.FullName);
+                tree.AddChild(fi.Name);
                 if (fi.Name == target)
                 {
                     path.Add(fi.FullName);
