@@ -27,12 +27,8 @@ namespace DFS
                 if (found)
                 {
                     tree.colour = 1;
-                    if (occurence) return tree;
+                    if (!occurence) return tree;
                 }
-             //   if (file!= "")
-             //    {
-             //       return file;
-             //   } 
             }
             foreach (FileInfo fi in source.GetFiles())
             {
@@ -44,7 +40,7 @@ namespace DFS
                     tree.AddChild(fi.Name, 1);
                     tree.colour = 1;
                     found = true;
-                    if (occurence) return tree;
+                    if (!occurence) return tree;
                 }
                 else
                 {
