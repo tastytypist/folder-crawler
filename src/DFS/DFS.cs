@@ -6,7 +6,7 @@ namespace DFS
     using System.IO;
     using System.Collections.Generic;
 
-    public class SearchDir
+    public class DepthFirstSearch
     {
         public static NTree<string> searchFolder(DirectoryInfo source, string target,List<string> path,out bool found, bool occurence)
         {
@@ -104,7 +104,7 @@ namespace DFS
             //    FileInfo diTarget = new FileInfo(targetDirectory);
             bool found = false;
             bool occurence = true;
-            NTree<string> cari = SearchDir.searchFolder(diSource, targetDirectory,path,out found,occurence);
+            NTree<string> cari = DepthFirstSearch.searchFolder(diSource, targetDirectory,path,out found,occurence);
             cari.Traverse(cari,1);
             Console.WriteLine(path[0]);
             Console.WriteLine(path[1]);

@@ -70,7 +70,7 @@ namespace GUI
                 {
                     // ALGORITMA DFS
                     bool found = false;
-                    pohon = SearchDir.searchFolder(diSource, fileName, path,out found,Occurence);
+                    pohon = DepthFirstSearch.searchFolder(diSource, fileName, path,out found,Occurence);
                     
                 }
                 stopWatch.Stop();
