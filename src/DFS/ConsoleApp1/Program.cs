@@ -97,13 +97,13 @@ namespace DFS
     {
         static void Main()
         {
-            string sourceDirectory = @"D:\Game";
-            string targetDirectory = @"Battlefield 1.rar";
+            string sourceDirectory = @"C:\Users\MSI GAMING\Documents\GitHub\Tubes-Alstrukdat";
+            string targetDirectory = @"buy.c";
             List<string> path = new List<string>();
             DirectoryInfo diSource = new DirectoryInfo(sourceDirectory);
             //    FileInfo diTarget = new FileInfo(targetDirectory);
             bool found = false;
-            bool occurence = false;
+            bool occurence = true;
             NTree<string> cari = SearchDir.searchFolder(diSource, targetDirectory,path,out found,occurence);
             cari.Traverse(cari,1);
             Console.WriteLine(path[0]);
