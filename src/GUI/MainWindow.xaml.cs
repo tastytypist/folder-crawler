@@ -1,8 +1,10 @@
-﻿using Microsoft.Win32;
+﻿using Microsoft.Msagl.GraphViewerGdi;
+using Microsoft.Msagl.Drawing;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
+using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -74,9 +76,10 @@ namespace GUI
                 stopWatch.Stop();
 
                 /* Output */
-                // Menampilkan gambar pohon (Sementara)
-                //string gambarPohon = @"D:\Personal\OneDrive - Institut Teknologi Bandung\Documents\Programming\GitHub\folder-crawler\src\GUI\dummy.png";
-                //opTreeVisual.Source = new BitmapImage(new Uri(gambarPohon));
+                // Menampilkan gambar pohon
+                ViewerSample.drawTree(pohon);
+                opTreeVisual.Source = new BitmapImage(new Uri(ViewerSample.treeImagePath));
+
                 // Menampilkan path dari file yang dicari
                 if (path.Count > 0)
                 {
@@ -88,7 +91,6 @@ namespace GUI
                 }
                 // Menampilkan waktu yang diperlukan selama pencarian
                 opTimeSpent.Text += stopWatch.ElapsedMilliseconds.ToString() + " ms";
-                ViewerSample.testGraph(pohon);
             }
 
         }
@@ -119,6 +121,9 @@ namespace GUI
     }
     class ViewerSample
     {
+        public static string treeImagePath = "";
+        public static List<string> treeImagePathList = new List<string>();
+        /*  TESTING
         public static void drawGraph()
         {
             //create a form 
@@ -147,27 +152,44 @@ namespace GUI
             //show the form 
             form.ShowDialog();
         }
-        public static void testGraph(NTree<string> tree)
+        */
+        public static void drawTree(NTree<string> tree)
         {
             //create a form 
-            System.Windows.Forms.Form form = new System.Windows.Forms.Form();
+            Form form = new Form();
             //create a viewer object 
-            Microsoft.Msagl.GraphViewerGdi.GViewer viewer = new Microsoft.Msagl.GraphViewerGdi.GViewer();
+            GViewer viewer = new GViewer();
             //create a graph object 
-            Microsoft.Msagl.Drawing.Graph graph = new Microsoft.Msagl.Drawing.Graph("graph");
+            Graph graph = new Graph("graph");
+            //create a graph renderer object
+            GraphRenderer renderer = new GraphRenderer(graph);
             //create the graph content 
             graph = createTree(graph, tree);
             //bind the graph to the viewer 
             viewer.Graph = graph;
+
+            //bind the graph to the renderer 
+            renderer.CalculateLayout();
+            int width = (int) graph.Width;
+            int height = (int) graph.Height;
+            Bitmap bitmap = new Bitmap(width, height, System.Drawing.Imaging.PixelFormat.Format32bppRgb);
+            renderer.Render(bitmap);
+            //save graph as image in png format
+            Random rnd = new Random();
+            int num = rnd.Next();
+            treeImagePath = Directory.GetCurrentDirectory() + "/treeImage" + num + ".png";
+            treeImagePathList.Add(treeImagePath);
+            bitmap.Save(treeImagePath);
+
             //associate the viewer with the form 
             form.SuspendLayout();
-            viewer.Dock = System.Windows.Forms.DockStyle.Fill;
+            viewer.Dock = DockStyle.Fill;
             form.Controls.Add(viewer);
             form.ResumeLayout();
             //show the form
             form.ShowDialog();
         }
-        public static Microsoft.Msagl.Drawing.Graph createTree(Microsoft.Msagl.Drawing.Graph graph, NTree<string> tree)
+        public static Graph createTree(Graph graph, NTree<string> tree)
         {
             /*
             graph.AddEdge("A", "B");

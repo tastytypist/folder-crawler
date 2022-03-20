@@ -143,10 +143,8 @@
                 </Grid.RowDefinitions>
 
                 <Rectangle Grid.Row="0" Margin="0 10 0 10"
-                           Stroke="Black" Fill="Gray"
+                           Stroke="Black" Fill="White"
                            Height="auto" RadiusX="5" RadiusY="5"/>
-
-                <WindowsFormsHost Grid.Row="0" x:Name="formTree"/>
 
                 <Image Grid.Row="0" x:Name="opTreeVisual"
                        Height="auto" Width="auto" Margin="10 20 10 20"/>
