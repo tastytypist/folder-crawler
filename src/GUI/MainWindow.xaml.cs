@@ -91,8 +91,24 @@ namespace GUI
                 }
                 // Menampilkan waktu yang diperlukan selama pencarian
                 opTimeSpent.Text += stopWatch.ElapsedMilliseconds.ToString() + " ms";
+
+                // Menampilkan tombol untuk membuka window baru untuk gambar
+                btnOpenInNewWindow.Visibility = Visibility.Visible;
             }
 
+        }
+
+        private void BtnOpenInNewWindow_Click(object sender, RoutedEventArgs e)
+        {
+            //create a form 
+            Form form = new Form();
+            //associate the viewer with the form 
+            form.SuspendLayout();
+            ViewerSample.viewer.Dock = DockStyle.Fill;
+            form.Controls.Add(ViewerSample.viewer);
+            form.ResumeLayout();
+            //show the form
+            form.ShowDialog();
         }
 
         private void PathFile_Click(object sender, RoutedEventArgs e)
@@ -123,6 +139,9 @@ namespace GUI
     {
         public static string treeImagePath = "";
         public static List<string> treeImagePathList = new List<string>();
+        //create a viewer object 
+        public static GViewer viewer = new GViewer();
+
         /*  TESTING
         public static void drawGraph()
         {
@@ -155,10 +174,6 @@ namespace GUI
         */
         public static void drawTree(NTree<string> tree)
         {
-            //create a form 
-            Form form = new Form();
-            //create a viewer object 
-            GViewer viewer = new GViewer();
             //create a graph object 
             Graph graph = new Graph("graph");
             //create a graph renderer object
@@ -180,14 +195,6 @@ namespace GUI
             treeImagePath = Directory.GetCurrentDirectory() + "/treeImage" + num + ".png";
             treeImagePathList.Add(treeImagePath);
             bitmap.Save(treeImagePath);
-
-            //associate the viewer with the form 
-            form.SuspendLayout();
-            viewer.Dock = DockStyle.Fill;
-            form.Controls.Add(viewer);
-            form.ResumeLayout();
-            //show the form
-            form.ShowDialog();
         }
         public static Graph createTree(Graph graph, NTree<string> tree)
         {
