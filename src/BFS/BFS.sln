@@ -2,7 +2,7 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BFS", "BFS.csproj", "{33BCE663-05FA-4CBC-AF9F-913F1264E2E6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConsoleApp1", "..\DFS\ConsoleApp1\ConsoleApp1.csproj", "{5213807D-B9BD-4567-9566-121C2CF37CD2}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DFS", "..\DFS\DFS.csproj", "{5213807D-B9BD-4567-9566-121C2CF37CD2}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
