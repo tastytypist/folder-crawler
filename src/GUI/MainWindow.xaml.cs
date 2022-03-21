@@ -59,7 +59,7 @@ namespace GUI
 
                 DirectoryInfo diSource = new DirectoryInfo(start);      // Strating directory
                 List<string> path = new List<string>();                 // List berisi path file yang dicari (result)
-                NTree<string> pohon = new NTree<string>(diSource.FullName,0);
+                NTree<string> pohon = new NTree<string>(diSource.Name,0,diSource.FullName);
                 stopWatch.Start();
                 if (btnBFS.IsChecked == true)
                 {
@@ -179,6 +179,7 @@ namespace GUI
             //create a graph renderer object
             GraphRenderer renderer = new GraphRenderer(graph);
             //create the graph content 
+            int id=0;
             graph = createTree(graph, tree);
             //bind the graph to the viewer 
             viewer.Graph = graph;
@@ -208,16 +209,22 @@ namespace GUI
             Microsoft.Msagl.Drawing.Node c = graph.FindNode("C");
             c.Attr.FillColor = Microsoft.Msagl.Drawing.Color.PaleGreen;
             c.Attr.Shape = Microsoft.Msagl.Drawing.Shape.Diamond;*/
+            Node parent = new Node(tree.path);
+            parent.LabelText = tree.data;
+            graph.AddNode(parent);
             foreach (NTree<string> kid in tree.children)
             {
-                graph.AddEdge(tree.data, kid.data);
-                if (kid.colour == 1) graph.FindNode(kid.data).Attr.FillColor = Microsoft.Msagl.Drawing.Color.Blue;
-                else if (kid.colour == 0) graph.FindNode(kid.data).Attr.FillColor = Microsoft.Msagl.Drawing.Color.Red;
+                Node child = new Node(kid.path);
+                child.LabelText = kid.data;
+                graph.AddNode(child);
+                graph.AddEdge(parent.Id, child.Id);
+                if (kid.colour == 1) graph.FindNode(child.Id).Attr.FillColor = Microsoft.Msagl.Drawing.Color.Blue;
+                else if (kid.colour == 0) graph.FindNode(child.Id).Attr.FillColor = Microsoft.Msagl.Drawing.Color.Red;
                 createTree(graph, kid);
 
             }
-            if (tree.colour == 1) graph.FindNode(tree.data).Attr.FillColor = Microsoft.Msagl.Drawing.Color.Blue;
-            else if (tree.colour == 0) graph.FindNode(tree.data).Attr.FillColor = Microsoft.Msagl.Drawing.Color.Red;
+            if (tree.colour == 1) graph.FindNode(parent.Id).Attr.FillColor = Microsoft.Msagl.Drawing.Color.Blue;
+            else if (tree.colour == 0) graph.FindNode(parent.Id).Attr.FillColor = Microsoft.Msagl.Drawing.Color.Red;
 
             return graph;
         }

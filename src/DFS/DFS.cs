@@ -14,7 +14,7 @@ namespace DFS
 
             // Copy each file into it's new directory.
             found = false;
-            NTree<string> tree = new NTree<string>(source.Name,0) ;
+            NTree<string> tree = new NTree<string>(source.Name,0,source.FullName) ;
         
 
             // Copy each subdirectory using recursion.
@@ -37,14 +37,14 @@ namespace DFS
                 if (fi.Name == target)
                 {
                     path.Add(fi.FullName);
-                    tree.AddChild(fi.Name, 1);
+                    tree.AddChild(fi.Name, 1,fi.FullName);
                     tree.colour = 1;
                     found = true;
                     if (!occurence) return tree;
                 }
                 else
                 {
-                    tree.AddChild(fi.Name, 0);
+                    tree.AddChild(fi.Name, 0,fi.FullName);
                 }
             }
             return tree;
@@ -60,19 +60,21 @@ namespace DFS
     public class NTree<T>
     {
         public T data;
+        public T path;
         public int colour;// pewarnaan 0 merah, 1 biru, 2 hitam;
         public LinkedList<NTree<T>> children;
 
-        public NTree(T data,int colour)
+        public NTree(T data,int colour,T path)
         {
             this.data = data;
+            this.path = path;
             this.colour = colour;
             children = new LinkedList<NTree<T>>();
         }
 
-        public void AddChild(T data, int colour)
+        public void AddChild(T data, int colour, T path)
         {
-            children.AddFirst(new NTree<T>(data,colour));
+            children.AddFirst(new NTree<T>(data,colour,path));
         }
 
         public NTree<T> GetChild(int i)
