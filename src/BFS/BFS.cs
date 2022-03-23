@@ -10,16 +10,17 @@ public class BreadthFirstSearch
     private int _fileFoundDepth;
     private readonly List<string> _filePaths;
     private NTree<object> _searchTree;
-    private readonly Queue<FileSystemInfo> _searchQueue;
+    private readonly Queue<NTree<object>> _searchQueue;
     private readonly Stopwatch _timeSpent;
 
     public BreadthFirstSearch(bool findMultipleOccurence = false)
     {
         _fileFound = false;
         _findMultipleOccurence = findMultipleOccurence;
+        _fileFoundDepth = 0;
         _filePaths = new List<string>();
         _searchTree = new NTree<object>(@"", 0, @"");
-        _searchQueue = new Queue<FileSystemInfo>();
+        _searchQueue = new Queue<NTree<object>>();
         _timeSpent = new Stopwatch();
     }
 
@@ -29,7 +30,7 @@ public class BreadthFirstSearch
         _searchTree = BuildTree(startDirectory);
         
         _timeSpent.Start();
-        _searchTree = SearchFile(startDirectory, targetFile);
+        SearchFile(targetFile);
         _timeSpent.Stop();
 
         return new Tuple<List<string>, NTree<object>, TimeSpan>(_filePaths, _searchTree, _timeSpent.Elapsed);
@@ -53,48 +54,28 @@ public class BreadthFirstSearch
         return searchTree;
     }
 
-    private NTree<object> SearchFile(DirectoryInfo startDirectory, string targetFile)
+    private void SearchFile(string targetFile)
     {
-        var searchTree = new NTree<object>(startDirectory, 0, startDirectory.FullName);
-        
-        foreach (var file in startDirectory.GetFiles())
-        {
-            _searchQueue.Enqueue(file);
-        }
-        
-        foreach (var directory in startDirectory.GetDirectories())
-        {
-            _searchQueue.Enqueue(directory);
-        }
+        _searchQueue.Enqueue(_searchTree);
 
-        foreach (var entry in searchTree.children)
+        while (_searchQueue.Count != 0 && (!_fileFound || _findMultipleOccurence))
         {
-            if (_fileFound && !_findMultipleOccurence)
+            var currentEntry = _searchQueue.Dequeue();
+            switch (currentEntry.data)
             {
-                return searchTree;
-            }
-            switch (entry.data)
-            {
-                case FileInfo file:
-                    if (file.Name == targetFile)
+                case FileInfo file when file.Name == targetFile:
+                    _fileFound = true;
+                    _filePaths.Add(file.FullName);
+                    break;
+                case DirectoryInfo:
+                    _fileFoundDepth++;
+                    foreach (var entry in currentEntry.children)
                     {
-                        _fileFound = true;
-                        _filePaths.Add(file.FullName);
-                        entry.colour = 1;
-
-                        if (!_findMultipleOccurence)
-                        {
-                            return searchTree;
-                        }
+                        _searchQueue.Enqueue(entry);
                     }
                     break;
-                case DirectoryInfo directory:
-                    _searchQueue.Enqueue(directory);
-                    break;
             }
         }
-
-        return searchTree;
     }
 }
 
