@@ -19,4 +19,8 @@
     <ProjectReference Include="..\DFS\DFS.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\BFS\BFS.csproj" />
+  </ItemGroup>
+
 </Project>
