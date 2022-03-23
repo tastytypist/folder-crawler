@@ -24,7 +24,7 @@ public class BreadthFirstSearch
         _timeSpent = new Stopwatch();
     }
 
-    public Tuple<List<string>, NTree<object>, TimeSpan> BreadthSearchFile
+    public Tuple<List<string>, NTree<object>, long> BreadthSearchFile
         (DirectoryInfo startDirectory, string targetFile)
     {
         _searchTree = BuildTree(startDirectory);
@@ -33,7 +33,7 @@ public class BreadthFirstSearch
         SearchFile(targetFile);
         _timeSpent.Stop();
 
-        return new Tuple<List<string>, NTree<object>, TimeSpan>(_filePaths, _searchTree, _timeSpent.Elapsed);
+        return new Tuple<List<string>, NTree<object>, long>(_filePaths, _searchTree, _timeSpent.ElapsedMilliseconds);
     }
 
     private static NTree<object> BuildTree(DirectoryInfo startDirectory)
