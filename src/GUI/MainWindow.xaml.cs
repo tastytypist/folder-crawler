@@ -20,6 +20,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using DFS;
+using BFS;
 
 namespace GUI
 {
@@ -56,6 +57,7 @@ namespace GUI
                 bool Occurence = (bool) ipFindAllOccurence.IsChecked; // Mode pencarian (semua kemunculan (true) / kemunculan pertama (false))
 
                 Stopwatch stopWatch = new Stopwatch();
+                long bfsTime = 0L;
 
                 DirectoryInfo diSource = new DirectoryInfo(start);      // Strating directory
                 List<string> path = new List<string>();                 // List berisi path file yang dicari (result)
@@ -64,7 +66,8 @@ namespace GUI
                 if (btnBFS.IsChecked == true)
                 {
                     // ALGORITMA BFS
-
+                    BreadthFirstSearch bfsSearch = new BreadthFirstSearch(Occurence);
+                    (path, pohon, bfsTime) = bfsSearch.BreadthSearchFile(diSource, fileName);
                 }
                 else if (btnDFS.IsChecked == true)
                 {
