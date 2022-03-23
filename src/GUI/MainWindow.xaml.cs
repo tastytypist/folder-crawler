@@ -2,23 +2,12 @@
 using Microsoft.Msagl.Drawing;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Forms;
-using System.Windows.Input;
-using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 using DFS;
 using BFS;
 
@@ -52,33 +41,35 @@ namespace GUI
             {
                 ClearOutputScreen();
 
-                string start = startDirectory.Text;                     // Nama starting directory
+                /* INPUT */
+                string start = startDirectory.Text;                     // Nama (string) starting directory
+                DirectoryInfo diSource = new DirectoryInfo(start);      // Starting directory
                 string fileName = ipFileName.Text;                      // Nama file yang ingin dicari
-                bool Occurence = (bool) ipFindAllOccurence.IsChecked; // Mode pencarian (semua kemunculan (true) / kemunculan pertama (false))
+                bool Occurence = (bool) ipFindAllOccurence.IsChecked;   // Mode pencarian (semua kemunculan (true) / kemunculan pertama (false))
 
-                Stopwatch stopWatch = new Stopwatch();
-                long bfsTime = 0L;
+                List<string> path = new List<string>();                                         // List berisi path file yang dicari (result)
+                NTree<string> pohon = new NTree<string>(diSource.Name,0,diSource.FullName);     // Pohon pencarian yang terbentuk
+                long elapsedTime = 0L;                                                            // Waktu pencarian 
 
-                DirectoryInfo diSource = new DirectoryInfo(start);      // Strating directory
-                List<string> path = new List<string>();                 // List berisi path file yang dicari (result)
-                NTree<string> pohon = new NTree<string>(diSource.Name,0,diSource.FullName);
-                stopWatch.Start();
+                /* ALGORITMA BFS dan DFS*/
                 if (btnBFS.IsChecked == true)
                 {
-                    // ALGORITMA BFS
+                    // BFS
                     BreadthFirstSearch bfsSearch = new BreadthFirstSearch(Occurence);
-                    (path, pohon, bfsTime) = bfsSearch.BreadthSearchFile(diSource, fileName);
+                    (path, pohon, elapsedTime) = bfsSearch.BreadthSearchFile(diSource, fileName);
                 }
                 else if (btnDFS.IsChecked == true)
                 {
-                    // ALGORITMA DFS
+                    // DFS
+                    Stopwatch stopWatch = new Stopwatch();
+                    stopWatch.Start();
                     bool found = false;
                     pohon = DepthFirstSearch.searchFolder(diSource, fileName, path,out found,Occurence);
-                    
+                    stopWatch.Stop();
+                    elapsedTime = stopWatch.ElapsedMilliseconds;
                 }
-                stopWatch.Stop();
 
-                /* Output */
+                /* OUTPUT */
                 // Menampilkan gambar pohon
                 ViewerSample.drawTree(pohon);
                 opTreeVisual.Source = new BitmapImage(new Uri(ViewerSample.treeImagePath));
@@ -86,14 +77,18 @@ namespace GUI
                 // Menampilkan path dari file yang dicari
                 if (path.Count > 0)
                 {
-                    textBlockPathList.Text += " (Double click to open folder)";
-                }    
+                    textBlockPathList.Text += "   (Double click to open folder)";
+                } else if (path.Count == 0)
+                {
+                    textBlockPathList.Text += "   FILE NOT FOUND!";
+                }
                 for (int i = 0; i < path.Count; i++)
                 {
                     opPathList.Items.Add(path[i]);
                 }
+
                 // Menampilkan waktu yang diperlukan selama pencarian
-                opTimeSpent.Text += stopWatch.ElapsedMilliseconds.ToString() + " ms";
+                opTimeSpent.Text += timeTaken.ToString() + " ms";
 
                 // Menampilkan tombol untuk membuka window baru untuk gambar
                 btnOpenInNewWindow.Visibility = Visibility.Visible;
@@ -102,6 +97,7 @@ namespace GUI
         }
 
         private void BtnOpenInNewWindow_Click(object sender, RoutedEventArgs e)
+        // Membuka window baru untuk menampilkan tree
         {
             //create a form 
             Form form = new Form();
@@ -140,42 +136,13 @@ namespace GUI
     }
     class ViewerSample
     {
-        public static string treeImagePath = "";
-        public static List<string> treeImagePathList = new List<string>();
+        public static string treeImagePath = "";                                // path file gambar tree
+        public static List<string> treeImagePathList = new List<string>();      // list semua path file gambar tree selama program dijalankan
         //create a viewer object 
         public static GViewer viewer = new GViewer();
 
-        /*  TESTING
-        public static void drawGraph()
-        {
-            //create a form 
-            System.Windows.Forms.Form form = new System.Windows.Forms.Form();
-            //create a viewer object 
-            Microsoft.Msagl.GraphViewerGdi.GViewer viewer = new Microsoft.Msagl.GraphViewerGdi.GViewer();
-            //create a graph object 
-            Microsoft.Msagl.Drawing.Graph graph = new Microsoft.Msagl.Drawing.Graph("graph");
-            //create the graph content 
-            graph.AddEdge("A", "B");
-            graph.AddEdge("B", "C");
-            graph.AddEdge("A", "C").Attr.Color = Microsoft.Msagl.Drawing.Color.Green;
-            graph.AddEdge("B", "D").Attr.Color = Microsoft.Msagl.Drawing.Color.Aqua;
-            graph.FindNode("A").Attr.FillColor = Microsoft.Msagl.Drawing.Color.Magenta;
-            graph.FindNode("B").Attr.FillColor = Microsoft.Msagl.Drawing.Color.MistyRose;
-            Microsoft.Msagl.Drawing.Node c = graph.FindNode("C");
-            c.Attr.FillColor = Microsoft.Msagl.Drawing.Color.PaleGreen;
-            c.Attr.Shape = Microsoft.Msagl.Drawing.Shape.Diamond;
-            //bind the graph to the viewer 
-            viewer.Graph = graph;
-            //associate the viewer with the form 
-            form.SuspendLayout();
-            viewer.Dock = System.Windows.Forms.DockStyle.Fill;
-            form.Controls.Add(viewer);
-            form.ResumeLayout();
-            //show the form 
-            form.ShowDialog();
-        }
-        */
         public static void drawTree(NTree<string> tree)
+        // Menggambar tree
         {
             //create a graph object 
             Graph graph = new Graph("graph");
@@ -186,7 +153,6 @@ namespace GUI
             graph = createTree(graph, tree);
             //bind the graph to the viewer 
             viewer.Graph = graph;
-
             //bind the graph to the renderer 
             renderer.CalculateLayout();
             int width = (int) graph.Width;
@@ -200,32 +166,29 @@ namespace GUI
             treeImagePathList.Add(treeImagePath);
             bitmap.Save(treeImagePath);
         }
+
         public static Graph createTree(Graph graph, NTree<string> tree)
+        // Membuat tree (msagl)
         {
-            /*
-            graph.AddEdge("A", "B");
-            graph.AddEdge("B", "C");
-            graph.AddEdge("A", "C").Attr.Color = Microsoft.Msagl.Drawing.Color.Green;
-            graph.AddEdge("B", "D").Attr.Color = Microsoft.Msagl.Drawing.Color.Aqua;
-            graph.FindNode("A").Attr.FillColor = Microsoft.Msagl.Drawing.Color.Magenta;
-            graph.FindNode("B").Attr.FillColor = Microsoft.Msagl.Drawing.Color.MistyRose;
-            Microsoft.Msagl.Drawing.Node c = graph.FindNode("C");
-            c.Attr.FillColor = Microsoft.Msagl.Drawing.Color.PaleGreen;
-            c.Attr.Shape = Microsoft.Msagl.Drawing.Shape.Diamond;*/
+            // Membuat node parent
             Node parent = new Node(tree.path);
             parent.LabelText = tree.data;
             graph.AddNode(parent);
+            // Iterasi setiap node children
             foreach (NTree<string> kid in tree.children)
             {
                 Node child = new Node(kid.path);
                 child.LabelText = kid.data;
                 graph.AddNode(child);
                 graph.AddEdge(parent.Id, child.Id);
+                // Pewarnaan node children
                 if (kid.colour == 1) graph.FindNode(child.Id).Attr.FillColor = Microsoft.Msagl.Drawing.Color.Blue;
                 else if (kid.colour == 0) graph.FindNode(child.Id).Attr.FillColor = Microsoft.Msagl.Drawing.Color.Red;
+                // Memroses Children secara rekursif
                 createTree(graph, kid);
 
             }
+            // Pewarnaan node parent
             if (tree.colour == 1) graph.FindNode(parent.Id).Attr.FillColor = Microsoft.Msagl.Drawing.Color.Blue;
             else if (tree.colour == 0) graph.FindNode(parent.Id).Attr.FillColor = Microsoft.Msagl.Drawing.Color.Red;
 
