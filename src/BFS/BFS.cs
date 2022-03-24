@@ -78,6 +78,8 @@ public class BreadthFirstSearch
     private void SearchFile(string targetFile)
     {
         _searchQueue.Enqueue(_searchTree);
+        var levelCountdown = 1;
+        var directoryCounter = 0;
 
         while (_searchQueue.Count != 0 && (!_fileFound || _findMultipleOccurence))
         {
@@ -89,11 +91,23 @@ public class BreadthFirstSearch
                     _filePaths.Add(file.FullName);
                     break;
                 case DirectoryInfo:
-                    _fileFoundDepth++;
                     foreach (var entry in currentEntry.children)
                     {
                         _searchQueue.Enqueue(entry);
+                        if (entry.data is DirectoryInfo)
+                        {
+                            directoryCounter++;
+                        }
                     }
+                    
+                    levelCountdown--;
+                    if (levelCountdown == 0)
+                    {
+                        _fileFoundDepth++;
+                        levelCountdown += directoryCounter;
+                        directoryCounter = 0;
+                    }
+                    
                     break;
             }
         }
