@@ -11,6 +11,7 @@ using System.Windows.Media.Imaging;
 using DFS;
 using BFS;
 
+
 namespace GUI
 {
     /// <summary>
@@ -68,9 +69,8 @@ namespace GUI
                     // DFS
                     Stopwatch stopWatch = new Stopwatch();
                     stopWatch.Start();
-                    bool found = false;
-                    
-                    pohon = DepthFirstSearch.searchFolder(diSource, fileName, path,out found,Occurence);
+                    found found = new found(false);
+                    pohon = DepthFirstSearch.searchFolder(diSource, fileName, path,found,Occurence);
                     stopWatch.Stop();
                     elapsedTime = stopWatch.ElapsedMilliseconds;
                 }

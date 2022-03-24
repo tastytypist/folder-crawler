@@ -5,47 +5,96 @@ namespace DFS
     using System;
     using System.IO;
     using System.Collections.Generic;
-
+    public class found
+    {
+        public bool find;
+        public found(bool find)
+        {
+            this.find = find;
+        }
+    }
     public class DepthFirstSearch
     {
-        public static NTree<FileSystemInfo> searchFolder(DirectoryInfo source, string target,List<string> path,out bool found, bool occurence)
+        public static NTree<FileSystemInfo> searchFolder(DirectoryInfo source, string target,List<string> path,found found, bool occurence)
         {
             // Check if the target directory exists, if not, create it.
 
             // Copy each file into it's new directory.
-            found = false;
-            NTree<FileSystemInfo> tree = new NTree<FileSystemInfo>(source,0) ;
-        
+            
+            NTree<FileSystemInfo> tree = new NTree<FileSystemInfo>(source,2) ;
+            if (!occurence && found.find) return tree;
 
             // Copy each subdirectory using recursion.
             foreach (DirectoryInfo diSourceSubDir in source.GetDirectories())
             {
 
-                NTree<FileSystemInfo> file = searchFolder(diSourceSubDir, target,path,out found,occurence);
+                NTree<FileSystemInfo> file = searchFolder(diSourceSubDir, target, path, found, occurence);
                 tree.children.AddLast(file);
-                if (found)
+                if (occurence)
                 {
-                    tree.colour = 1;
-                    if (!occurence) return tree;
+                    if (file.colour == 1)
+                    {
+                        tree.colour = 1;
+                    }
+                    else if(tree.colour == 2 && file.colour == 0)
+                    {
+                        tree.colour = 0;
+                    }
+                }
+                else if (!occurence)
+                {
+                    if (found.find && file.colour ==1)
+                    {
+                        tree.colour = 1;
+                    }
+                    else if (found.find && file.colour == 0 && tree.colour != 1)
+                    {
+                        tree.colour = 0;
+                    }
                 }
             }
             foreach (FileInfo fi in source.GetFiles())
             {
-                //Console.WriteLine(fi);
                 
-                if (fi.Name == target)
+                if (occurence)
                 {
-                    path.Add(fi.FullName);
-                    tree.AddChild(fi, 1);
-                    tree.colour = 1;
-                    found = true;
-                    if (!occurence) return tree;
+                    if (fi.Name == target)
+                    {
+                        path.Add(fi.FullName);
+                        tree.AddChild(fi, 1);
+                        tree.colour = 1;
+                        found.find = true;
+                    }
+                    else
+                    {
+                        tree.AddChild(fi, 0);
+                        if (tree.colour != 1) tree.colour = 0;
+                    }
                 }
-                else
+                else if (!occurence)
                 {
-                    tree.AddChild(fi, 0);
+                    if (fi.Name == target && !found.find)
+                    {
+                        path.Add(fi.FullName);
+                        tree.AddChild(fi, 1);
+                        tree.colour = 1;
+                        found.find = true;
+                        return tree;
+                    }
+                    else if (found.find)
+                    {
+                        tree.AddChild(fi, 2);
+                        return tree;
+
+                    }
+
+                    else if(!found.find)
+                    {
+                        tree.AddChild(fi, 0);
+                    }
                 }
             }
+            if (tree.colour == 2 && occurence) tree.colour = 0;
             return tree;
         }
 
@@ -118,9 +167,9 @@ namespace DFS
             List<string> path = new List<string>();
             DirectoryInfo diSource = new DirectoryInfo(sourceDirectory);
             //    FileInfo diTarget = new FileInfo(targetDirectory);
-            bool found = false;
+            found found = new found(false);
             bool occurence = true;
-            NTree<FileSystemInfo> cari = DepthFirstSearch.searchFolder(diSource, targetDirectory,path,out found,occurence);
+            NTree<FileSystemInfo> cari = DepthFirstSearch.searchFolder(diSource, targetDirectory,path,found,occurence);
             cari.Traverse(cari,1);
             Console.WriteLine(path[0]);
             Console.WriteLine(path[1]);
