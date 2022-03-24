@@ -33,6 +33,27 @@ public class BreadthFirstSearch
         SearchFile(targetFile);
         _timeSpent.Stop();
 
+        if (!_findMultipleOccurence)
+        {
+            var currentLevel = 0;
+            _searchTree = NTree<FileSystemInfo>.PurgeChild(_searchTree, _fileFoundDepth, ref currentLevel);
+        }
+
+        if (!_fileFound)
+            return new Tuple<List<string>, NTree<FileSystemInfo>, long>(_filePaths, _searchTree,
+                _timeSpent.ElapsedMilliseconds);
+        switch (_findMultipleOccurence)
+        {
+            case false:
+                var colourDepth = 0;
+                var fileIsColoured = false;
+                _searchTree = ColourTree((DirectoryInfo)_searchTree.data, ref fileIsColoured, ref colourDepth);
+                break;
+            case true:
+                _searchTree = ColourMultiTree((DirectoryInfo)_searchTree.data);
+                break;
+        }
+
         return new Tuple<List<string>, NTree<FileSystemInfo>, long>(_filePaths, _searchTree, _timeSpent.ElapsedMilliseconds);
     }
 
@@ -76,6 +97,84 @@ public class BreadthFirstSearch
                     break;
             }
         }
+    }
+
+    private NTree<FileSystemInfo> ColourTree
+        (DirectoryInfo startDirectory, ref bool isColoured, ref int currentDepth)
+    {
+        var searchTree = new NTree<FileSystemInfo>(startDirectory, 0, startDirectory.FullName);
+
+        if (currentDepth >= _fileFoundDepth)
+        {
+            currentDepth--;
+            return searchTree;
+        }
+        currentDepth++;
+        foreach (var file in startDirectory.GetFiles())
+        {
+            if (isColoured && currentDepth == _fileFoundDepth)
+            {
+                searchTree.children.AddLast(new NTree<FileSystemInfo>(file, 2, file.FullName));
+            }
+            else if (_filePaths.Contains(file.FullName))
+            {
+                isColoured = true;
+                searchTree.children.AddLast(new NTree<FileSystemInfo>(file, 1, file.FullName));
+                searchTree.colour = 1;
+            }
+            else
+            {
+                searchTree.children.AddLast(new NTree<FileSystemInfo>(file, 0, file.FullName));
+            }
+        }
+
+        foreach (var directory in startDirectory.GetDirectories())
+        {
+            var subdirectory = BuildTree(directory);
+            if (isColoured && currentDepth == _fileFoundDepth)
+            {
+                subdirectory.colour = 2;
+            }
+                
+            searchTree.children.AddLast(subdirectory);
+            if (subdirectory.colour == 1)
+            {
+                searchTree.colour = 1;
+            }
+        }
+
+        currentDepth--;
+        return searchTree;
+    }
+    
+    private NTree<FileSystemInfo> ColourMultiTree(DirectoryInfo startDirectory)
+    {
+        var searchTree = new NTree<FileSystemInfo>(startDirectory, 0, startDirectory.FullName);
+
+        foreach (var file in startDirectory.GetFiles())
+        {
+            if (_filePaths.Contains(file.FullName))
+            {
+                searchTree.children.AddLast(new NTree<FileSystemInfo>(file, 1, file.FullName));
+                searchTree.colour = 1;
+            }
+            else
+            {
+                searchTree.children.AddLast(new NTree<FileSystemInfo>(file, 0, file.FullName));
+            }
+        }
+
+        foreach (var directory in startDirectory.GetDirectories())
+        {
+            var subdirectory = BuildTree(directory);
+            searchTree.children.AddLast(subdirectory);
+            if (subdirectory.colour == 1)
+            {
+                searchTree.colour = 1;
+            }
+        }
+
+        return searchTree;
     }
 }
 
