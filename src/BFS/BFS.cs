@@ -120,12 +120,12 @@ public class BreadthFirstSearch
 
         if (currentDepth >= _fileFoundDepth)
         {
-            currentDepth--;
             return searchTree;
         }
-        currentDepth++;
+
         foreach (var file in startDirectory.GetFiles())
         {
+            currentDepth++;
             if (isColoured && currentDepth == _fileFoundDepth)
             {
                 searchTree.children.AddLast(new NTree<FileSystemInfo>(file, 2));
@@ -140,10 +140,12 @@ public class BreadthFirstSearch
             {
                 searchTree.children.AddLast(new NTree<FileSystemInfo>(file, 0));
             }
+            currentDepth--;
         }
 
         foreach (var directory in startDirectory.GetDirectories())
         {
+            currentDepth++;
             var subdirectory = ColourTree(directory, ref isColoured, ref currentDepth);
             if (isColoured && currentDepth == _fileFoundDepth)
             {
@@ -155,9 +157,9 @@ public class BreadthFirstSearch
             {
                 searchTree.colour = 1;
             }
+            currentDepth--;
         }
-
-        currentDepth--;
+        
         return searchTree;
     }
     
