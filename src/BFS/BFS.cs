@@ -19,7 +19,7 @@ public class BreadthFirstSearch
         _findMultipleOccurence = findMultipleOccurence;
         _fileFoundDepth = 0;
         _filePaths = new List<string>();
-        _searchTree = new NTree<FileSystemInfo>(new DirectoryInfo(Directory.GetCurrentDirectory()), 0, @"");
+        _searchTree = new NTree<FileSystemInfo>(new DirectoryInfo(Directory.GetCurrentDirectory()), 0);
         _searchQueue = new Queue<NTree<FileSystemInfo>>();
         _timeSpent = new Stopwatch();
     }
@@ -59,11 +59,11 @@ public class BreadthFirstSearch
 
     private static NTree<FileSystemInfo> BuildTree(DirectoryInfo startDirectory)
     {
-        var searchTree = new NTree<FileSystemInfo>(startDirectory, 0, startDirectory.FullName);
+        var searchTree = new NTree<FileSystemInfo>(startDirectory, 0);
 
         foreach (var file in startDirectory.GetFiles())
         {
-            searchTree.children.AddLast(new NTree<FileSystemInfo>(file, 0, file.FullName));
+            searchTree.children.AddLast(new NTree<FileSystemInfo>(file, 0));
         }
 
         foreach (var directory in startDirectory.GetDirectories())
@@ -102,7 +102,7 @@ public class BreadthFirstSearch
     private NTree<FileSystemInfo> ColourTree
         (DirectoryInfo startDirectory, ref bool isColoured, ref int currentDepth)
     {
-        var searchTree = new NTree<FileSystemInfo>(startDirectory, 0, startDirectory.FullName);
+        var searchTree = new NTree<FileSystemInfo>(startDirectory, 0);
 
         if (currentDepth >= _fileFoundDepth)
         {
@@ -114,17 +114,17 @@ public class BreadthFirstSearch
         {
             if (isColoured && currentDepth == _fileFoundDepth)
             {
-                searchTree.children.AddLast(new NTree<FileSystemInfo>(file, 2, file.FullName));
+                searchTree.children.AddLast(new NTree<FileSystemInfo>(file, 2));
             }
             else if (_filePaths.Contains(file.FullName))
             {
                 isColoured = true;
-                searchTree.children.AddLast(new NTree<FileSystemInfo>(file, 1, file.FullName));
+                searchTree.children.AddLast(new NTree<FileSystemInfo>(file, 1));
                 searchTree.colour = 1;
             }
             else
             {
-                searchTree.children.AddLast(new NTree<FileSystemInfo>(file, 0, file.FullName));
+                searchTree.children.AddLast(new NTree<FileSystemInfo>(file, 0));
             }
         }
 
@@ -149,18 +149,18 @@ public class BreadthFirstSearch
     
     private NTree<FileSystemInfo> ColourMultiTree(DirectoryInfo startDirectory)
     {
-        var searchTree = new NTree<FileSystemInfo>(startDirectory, 0, startDirectory.FullName);
+        var searchTree = new NTree<FileSystemInfo>(startDirectory, 0);
 
         foreach (var file in startDirectory.GetFiles())
         {
             if (_filePaths.Contains(file.FullName))
             {
-                searchTree.children.AddLast(new NTree<FileSystemInfo>(file, 1, file.FullName));
+                searchTree.children.AddLast(new NTree<FileSystemInfo>(file, 1));
                 searchTree.colour = 1;
             }
             else
             {
-                searchTree.children.AddLast(new NTree<FileSystemInfo>(file, 0, file.FullName));
+                searchTree.children.AddLast(new NTree<FileSystemInfo>(file, 0));
             }
         }
 

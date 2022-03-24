@@ -8,21 +8,20 @@ namespace DFS
 
     public class DepthFirstSearch
     {
-        public static NTree<string> searchFolder(DirectoryInfo source, string target,List<string> path,out bool found, bool occurence)
+        public static NTree<FileSystemInfo> searchFolder(DirectoryInfo source, string target,List<string> path,out bool found, bool occurence)
         {
             // Check if the target directory exists, if not, create it.
 
             // Copy each file into it's new directory.
             found = false;
-            NTree<string> tree = new NTree<string>(source.Name,0,source.FullName) ;
+            NTree<FileSystemInfo> tree = new NTree<FileSystemInfo>(source,0) ;
         
 
             // Copy each subdirectory using recursion.
-            string subdir = @"";
             foreach (DirectoryInfo diSourceSubDir in source.GetDirectories())
             {
 
-                NTree<string> file = searchFolder(diSourceSubDir, target,path,out found,occurence);
+                NTree<FileSystemInfo> file = searchFolder(diSourceSubDir, target,path,out found,occurence);
                 tree.children.AddLast(file);
                 if (found)
                 {
@@ -37,14 +36,14 @@ namespace DFS
                 if (fi.Name == target)
                 {
                     path.Add(fi.FullName);
-                    tree.AddChild(fi.Name, 1,fi.FullName);
+                    tree.AddChild(fi, 1);
                     tree.colour = 1;
                     found = true;
                     if (!occurence) return tree;
                 }
                 else
                 {
-                    tree.AddChild(fi.Name, 0,fi.FullName);
+                    tree.AddChild(fi, 0);
                 }
             }
             return tree;
@@ -60,21 +59,19 @@ namespace DFS
     public class NTree<T>
     {
         public T data;
-        public string path;
         public int colour;// pewarnaan 0 merah, 1 biru, 2 hitam;
         public LinkedList<NTree<T>> children;
 
-        public NTree(T data,int colour,string path)
+        public NTree(T data,int colour)
         {
             this.data = data;
-            this.path = path;
             this.colour = colour;
             children = new LinkedList<NTree<T>>();
         }
 
-        public void AddChild(T data, int colour, string path)
+        public void AddChild(T data, int colour)
         {
-            children.AddFirst(new NTree<T>(data,colour,path));
+            children.AddFirst(new NTree<T>(data,colour));
         }
 
         public NTree<T> GetChild(int i)
@@ -123,7 +120,7 @@ namespace DFS
             //    FileInfo diTarget = new FileInfo(targetDirectory);
             bool found = false;
             bool occurence = true;
-            NTree<string> cari = DepthFirstSearch.searchFolder(diSource, targetDirectory,path,out found,occurence);
+            NTree<FileSystemInfo> cari = DepthFirstSearch.searchFolder(diSource, targetDirectory,path,out found,occurence);
             cari.Traverse(cari,1);
             Console.WriteLine(path[0]);
             Console.WriteLine(path[1]);
