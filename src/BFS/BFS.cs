@@ -130,7 +130,7 @@ public class BreadthFirstSearch
 
         foreach (var directory in startDirectory.GetDirectories())
         {
-            var subdirectory = BuildTree(directory);
+            var subdirectory = ColourTree(directory, ref isColoured, ref currentDepth);
             if (isColoured && currentDepth == _fileFoundDepth)
             {
                 subdirectory.colour = 2;
@@ -166,7 +166,7 @@ public class BreadthFirstSearch
 
         foreach (var directory in startDirectory.GetDirectories())
         {
-            var subdirectory = BuildTree(directory);
+            var subdirectory = ColourMultiTree(directory);
             searchTree.children.AddLast(subdirectory);
             if (subdirectory.colour == 1)
             {
