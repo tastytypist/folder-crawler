@@ -48,15 +48,22 @@ namespace GUI
                 bool Occurence = (bool) ipFindAllOccurence.IsChecked;   // Mode pencarian (semua kemunculan (true) / kemunculan pertama (false))
 
                 List<string> path = new List<string>();                                         // List berisi path file yang dicari (result)
-                NTree<string> pohon = new NTree<string>(diSource.Name,0,diSource.FullName);     // Pohon pencarian yang terbentuk
+                     // Pohon pencarian yang terbentuk
                 long elapsedTime = 0L;                                                            // Waktu pencarian 
 
                 /* ALGORITMA BFS dan DFS*/
                 if (btnBFS.IsChecked == true)
                 {
                     // BFS
+                    Stopwatch stopWatch = new Stopwatch();
+                    stopWatch.Start();
                     BreadthFirstSearch bfsSearch = new BreadthFirstSearch(Occurence);
+                    NTree<FileSystemInfo> pohon = new NTree<FileSystemInfo>(diSource, 0, diSource.FullName);
                     (path, pohon, elapsedTime) = bfsSearch.BreadthSearchFile(diSource, fileName);
+                    stopWatch.Stop();
+                    elapsedTime = stopWatch.ElapsedMilliseconds;
+                    ViewerSample.drawTree(pohon);
+                    opTreeVisual.Source = new BitmapImage(new Uri(ViewerSample.treeImagePath));
                 }
                 else if (btnDFS.IsChecked == true)
                 {
@@ -64,15 +71,17 @@ namespace GUI
                     Stopwatch stopWatch = new Stopwatch();
                     stopWatch.Start();
                     bool found = false;
+                    NTree<string> pohon = new NTree<string>(diSource.Name, 0, diSource.FullName);
                     pohon = DepthFirstSearch.searchFolder(diSource, fileName, path,out found,Occurence);
                     stopWatch.Stop();
                     elapsedTime = stopWatch.ElapsedMilliseconds;
+                    ViewerSample.drawTree(pohon);
+                    opTreeVisual.Source = new BitmapImage(new Uri(ViewerSample.treeImagePath));
                 }
 
                 /* OUTPUT */
                 // Menampilkan gambar pohon
-                ViewerSample.drawTree(pohon);
-                opTreeVisual.Source = new BitmapImage(new Uri(ViewerSample.treeImagePath));
+                
 
                 // Menampilkan path dari file yang dicari
                 if (path.Count > 0)
@@ -88,7 +97,7 @@ namespace GUI
                 }
 
                 // Menampilkan waktu yang diperlukan selama pencarian
-                opTimeSpent.Text += timeTaken.ToString() + " ms";
+                opTimeSpent.Text += elapsedTime.ToString() + " ms";
 
                 // Menampilkan tombol untuk membuka window baru untuk gambar
                 btnOpenInNewWindow.Visibility = Visibility.Visible;
