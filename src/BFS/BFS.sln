@@ -1,8 +1,11 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BFS", "BFS.csproj", "{33BCE663-05FA-4CBC-AF9F-913F1264E2E6}"
+# Visual Studio Version 17
+VisualStudioVersion = 17.1.32228.430
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BFS", "BFS.csproj", "{33BCE663-05FA-4CBC-AF9F-913F1264E2E6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DFS", "..\DFS\DFS.csproj", "{5213807D-B9BD-4567-9566-121C2CF37CD2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DFS", "..\DFS\DFS.csproj", "{5213807D-B9BD-4567-9566-121C2CF37CD2}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -16,5 +19,13 @@ Global
 		{33BCE663-05FA-4CBC-AF9F-913F1264E2E6}.Release|Any CPU.Build.0 = Release|Any CPU
 		{5213807D-B9BD-4567-9566-121C2CF37CD2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{5213807D-B9BD-4567-9566-121C2CF37CD2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5213807D-B9BD-4567-9566-121C2CF37CD2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5213807D-B9BD-4567-9566-121C2CF37CD2}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {E8E7B0A6-4E35-40C2-B424-607515E502A4}
 	EndGlobalSection
 EndGlobal

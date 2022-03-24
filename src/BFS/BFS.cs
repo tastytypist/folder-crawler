@@ -32,12 +32,12 @@ public class BreadthFirstSearch
         _timeSpent.Start();
         SearchFile(targetFile);
         _timeSpent.Stop();
-
+        /*
         if (!_findMultipleOccurence)
         {
             var currentLevel = 0;
             _searchTree = NTree<FileSystemInfo>.PurgeChild(_searchTree, _fileFoundDepth, ref currentLevel);
-        }
+        }*/
 
         if (!_fileFound)
             return new Tuple<List<string>, NTree<FileSystemInfo>, long>(_filePaths, _searchTree,
@@ -182,8 +182,10 @@ public static class BreadthTest
 {
     public static void Main()
     {
-        const string start = @"C:\Users\Nathan\Documents";
-        const string goal = @"htw.wav";
+        //const string start = @"C:\Users\Nathan\Documents";
+        //const string goal = @"htw.wav";
+        const string start = @"D:\Tugas Kuliah\Test";
+        const string goal = @"M.txt";
         var startSource = new DirectoryInfo(start);
 
         var searcher = new BreadthFirstSearch();
