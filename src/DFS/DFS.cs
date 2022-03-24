@@ -43,7 +43,11 @@ namespace DFS
                 }
                 else if (!occurence)
                 {
-                    if (found.find && file.colour ==1)
+                    if(!found.find)
+                    {
+                        tree.colour = 0;
+                    }
+                    else if (found.find && file.colour ==1)
                     {
                         tree.colour = 1;
                     }
@@ -79,22 +83,21 @@ namespace DFS
                         tree.AddChild(fi, 1);
                         tree.colour = 1;
                         found.find = true;
-                        return tree;
                     }
                     else if (found.find)
                     {
                         tree.AddChild(fi, 2);
-                        return tree;
 
                     }
 
                     else if(!found.find)
                     {
                         tree.AddChild(fi, 0);
+                        tree.colour = 0;
                     }
                 }
             }
-            if (tree.colour == 2 && occurence) tree.colour = 0;
+            if (tree.colour == 2 ) tree.colour = 0;
             return tree;
         }
 
