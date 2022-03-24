@@ -9,8 +9,8 @@ public class BreadthFirstSearch
     private readonly bool _findMultipleOccurence;
     private int _fileFoundDepth;
     private readonly List<string> _filePaths;
-    private NTree<object> _searchTree;
-    private readonly Queue<NTree<object>> _searchQueue;
+    private NTree<FileSystemInfo> _searchTree;
+    private readonly Queue<NTree<FileSystemInfo>> _searchQueue;
     private readonly Stopwatch _timeSpent;
 
     public BreadthFirstSearch(bool findMultipleOccurence = false)
@@ -19,12 +19,12 @@ public class BreadthFirstSearch
         _findMultipleOccurence = findMultipleOccurence;
         _fileFoundDepth = 0;
         _filePaths = new List<string>();
-        _searchTree = new NTree<object>(@"", 0, @"");
-        _searchQueue = new Queue<NTree<object>>();
+        _searchTree = new NTree<FileSystemInfo>(new DirectoryInfo(Directory.GetCurrentDirectory()), 0, @"");
+        _searchQueue = new Queue<NTree<FileSystemInfo>>();
         _timeSpent = new Stopwatch();
     }
 
-    public Tuple<List<string>, NTree<object>, long> BreadthSearchFile
+    public Tuple<List<string>, NTree<FileSystemInfo>, long> BreadthSearchFile
         (DirectoryInfo startDirectory, string targetFile)
     {
         _searchTree = BuildTree(startDirectory);
@@ -33,16 +33,16 @@ public class BreadthFirstSearch
         SearchFile(targetFile);
         _timeSpent.Stop();
 
-        return new Tuple<List<string>, NTree<object>, long>(_filePaths, _searchTree, _timeSpent.ElapsedMilliseconds);
+        return new Tuple<List<string>, NTree<FileSystemInfo>, long>(_filePaths, _searchTree, _timeSpent.ElapsedMilliseconds);
     }
 
-    private static NTree<object> BuildTree(DirectoryInfo startDirectory)
+    private static NTree<FileSystemInfo> BuildTree(DirectoryInfo startDirectory)
     {
-        var searchTree = new NTree<object>(startDirectory, 0, startDirectory.FullName);
+        var searchTree = new NTree<FileSystemInfo>(startDirectory, 0, startDirectory.FullName);
 
         foreach (var file in startDirectory.GetFiles())
         {
-            searchTree.children.AddLast(new NTree<object>(file, 0, file.FullName));
+            searchTree.children.AddLast(new NTree<FileSystemInfo>(file, 0, file.FullName));
         }
 
         foreach (var directory in startDirectory.GetDirectories())
@@ -79,7 +79,7 @@ public class BreadthFirstSearch
     }
 }
 
-public class BreadthTest
+public static class BreadthTest
 {
     public static void Main()
     {
@@ -89,8 +89,8 @@ public class BreadthTest
 
         var searcher = new BreadthFirstSearch();
         var (paths, tree, time) = searcher.BreadthSearchFile(startSource, goal);
+        tree.Traverse(tree, 1);
         Console.WriteLine(paths);
-        Console.WriteLine(tree);
         Console.WriteLine(time);
     }
 }

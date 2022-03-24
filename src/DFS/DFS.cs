@@ -60,11 +60,11 @@ namespace DFS
     public class NTree<T>
     {
         public T data;
-        public T path;
+        public string path;
         public int colour;// pewarnaan 0 merah, 1 biru, 2 hitam;
         public LinkedList<NTree<T>> children;
 
-        public NTree(T data,int colour,T path)
+        public NTree(T data,int colour,string path)
         {
             this.data = data;
             this.path = path;
@@ -72,7 +72,7 @@ namespace DFS
             children = new LinkedList<NTree<T>>();
         }
 
-        public void AddChild(T data, int colour, T path)
+        public void AddChild(T data, int colour, string path)
         {
             children.AddFirst(new NTree<T>(data,colour,path));
         }
