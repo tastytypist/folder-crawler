@@ -95,7 +95,7 @@ namespace DFS
                 Traverse(kid,i+1);
         }
 
-        public NTree<T> PurgeChild(NTree<T> node, int targetLevel, ref int currentLevel)
+        public static NTree<T> PurgeChild(NTree<T> node, int targetLevel, ref int currentLevel)
         {
             if (currentLevel == targetLevel)
             {
