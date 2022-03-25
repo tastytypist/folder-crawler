@@ -73,7 +73,10 @@ namespace GUI
                 /* OUTPUT */
                 // Menampilkan gambar pohon
                 ViewerSample.drawTree(pohon);
-                opTreeVisual.Source = new BitmapImage(new Uri(ViewerSample.treeImagePath));
+                if (Directory.Exists(ViewerSample.treeImagePath))
+                {
+                    opTreeVisual.Source = new BitmapImage(new Uri(ViewerSample.treeImagePath));
+                }
 
                 // Menampilkan path dari file yang dicari
                 if (path.Count > 0)
@@ -164,7 +167,14 @@ namespace GUI
             int num = rnd.Next();
             treeImagePath = Directory.GetCurrentDirectory() + "/treeImage" + num + ".png";
             treeImagePathList.Add(treeImagePath);
-            bitmap.Save(treeImagePath);
+            try
+            {
+                bitmap.Save(treeImagePath);
+            }
+            catch (Exception ex)
+            {
+
+            }
         }
 
         public static Graph createTree(Graph graph, NTree<FileSystemInfo> tree)
