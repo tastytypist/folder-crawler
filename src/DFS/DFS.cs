@@ -126,14 +126,6 @@ namespace DFS
             children.AddFirst(new NTree<T>(data,colour));
         }
 
-        public NTree<T> GetChild(int i)
-        {
-            foreach (NTree<T> n in children)
-                if (--i == 0)
-                    return n;
-            return null;
-        }
-
         public void Traverse(NTree<T> node,int i)
         {
             Console.Write(node.colour);
@@ -142,23 +134,6 @@ namespace DFS
             Console.WriteLine();
             foreach (NTree<T> kid in node.children)
                 Traverse(kid,i+1);
-        }
-
-        public static NTree<T> PurgeChild(NTree<T> node, int targetLevel, ref int currentLevel)
-        {
-            if (currentLevel == targetLevel)
-            {
-                node.children = new LinkedList<NTree<T>>();
-                currentLevel--;
-                return node;
-            }
-            currentLevel++;
-            foreach (var entry in node.children)
-            {
-                PurgeChild(entry, targetLevel, ref currentLevel);
-            }
-
-            return node;
         }
     }
     class Program
