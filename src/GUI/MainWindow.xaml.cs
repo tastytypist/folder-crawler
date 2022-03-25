@@ -73,9 +73,13 @@ namespace GUI
                 /* OUTPUT */
                 // Menampilkan gambar pohon
                 ViewerSample.drawTree(pohon);
-                if (Directory.Exists(ViewerSample.treeImagePath))
+                try
                 {
                     opTreeVisual.Source = new BitmapImage(new Uri(ViewerSample.treeImagePath));
+                }
+                catch (Exception ex)
+                {
+
                 }
 
                 // Menampilkan path dari file yang dicari
@@ -141,7 +145,6 @@ namespace GUI
     class ViewerSample
     {
         public static string treeImagePath = "";                                // path file gambar tree
-        public static List<string> treeImagePathList = new List<string>();      // list semua path file gambar tree selama program dijalankan
         //create a viewer object 
         public static GViewer viewer = new GViewer();
 
@@ -166,7 +169,6 @@ namespace GUI
             Random rnd = new Random();
             int num = rnd.Next();
             treeImagePath = Directory.GetCurrentDirectory() + "/treeImage" + num + ".png";
-            treeImagePathList.Add(treeImagePath);
             try
             {
                 bitmap.Save(treeImagePath);
