@@ -32,12 +32,12 @@ public class BreadthFirstSearch
         _timeSpent.Start();
         SearchFile(targetFile);
         _timeSpent.Stop();
-        
+        /*
         if (!_findMultipleOccurence)
         {
             var currentLevel = 0;
             _searchTree = NTree<FileSystemInfo>.PurgeChild(_searchTree, _fileFoundDepth, ref currentLevel);
-        }
+        }*/
 
         if (!_fileFound)
             return new Tuple<List<string>, NTree<FileSystemInfo>, long>(_filePaths, _searchTree,
