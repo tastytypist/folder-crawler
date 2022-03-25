@@ -155,8 +155,8 @@ namespace GUI
             viewer.Graph = graph;
             //bind the graph to the renderer 
             renderer.CalculateLayout();
-            int width = (int) 30000;
-            int height = (int) (graph.Height / graph.Width * 30000);
+            int width = (int)graph.Width;
+            int height = (int)graph.Height;
             Bitmap bitmap = new Bitmap(width, height, System.Drawing.Imaging.PixelFormat.Format32bppRgb);
             renderer.Render(bitmap);
             //save graph as image in png format
