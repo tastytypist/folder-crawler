@@ -3,6 +3,10 @@ using DFS;
 
 namespace BFS;
 
+/// <summary>
+/// Class <c>BreadthFirstSearch</c> represents the object that facilitates
+/// file Breadth First Search.
+/// </summary>
 public class BreadthFirstSearch
 {
     private bool _fileFound;
@@ -13,6 +17,11 @@ public class BreadthFirstSearch
     private readonly Queue<NTree<FileSystemInfo>> _searchQueue;
     private readonly Stopwatch _timeSpent;
 
+    /// <summary>
+    /// Constructor for class <c>BreadthFirstSearch</c>.
+    /// </summary>
+    /// <param name="findMultipleOccurence"><c>true</c> if searching for all
+    /// occurrences within a directory tree, <c>false</c> otherwise.</param>
     public BreadthFirstSearch(bool findMultipleOccurence = false)
     {
         _fileFound = false;
@@ -24,6 +33,13 @@ public class BreadthFirstSearch
         _timeSpent = new Stopwatch();
     }
 
+    /// <summary>
+    /// Search a given file using breadth-first search.
+    /// </summary>
+    /// <param name="startDirectory">root node for the directory tree.</param>
+    /// <param name="targetFile">name of the target file.</param>
+    /// <returns>A <c>Tuple</c> consisting of list of found file paths,
+    /// coloured directory tree, and time elapsed during searching.</returns>
     public Tuple<List<string>, NTree<FileSystemInfo>, long> BreadthSearchFile
         (DirectoryInfo startDirectory, string targetFile)
     {
@@ -51,6 +67,12 @@ public class BreadthFirstSearch
         return new Tuple<List<string>, NTree<FileSystemInfo>, long>(_filePaths, _searchTree, _timeSpent.ElapsedMilliseconds);
     }
 
+    /// <summary>
+    /// Build a full directory tree to be searched in.
+    /// </summary>
+    /// <param name="startDirectory">root node of the directory tree.</param>
+    /// <returns>A full directory tree with <paramref name="startDirectory"/>
+    /// as its root.</returns>
     private static NTree<FileSystemInfo> BuildTree(DirectoryInfo startDirectory)
     {
         var searchTree = new NTree<FileSystemInfo>(startDirectory, 0);
@@ -69,6 +91,10 @@ public class BreadthFirstSearch
         return searchTree;
     }
 
+    /// <summary>
+    /// Look for the target file in the directory tree.
+    /// </summary>
+    /// <param name="targetFile">the name of the file being looked for.</param>
     private void SearchFile(string targetFile)
     {
         _searchQueue.Enqueue(_searchTree);
@@ -107,6 +133,16 @@ public class BreadthFirstSearch
         }
     }
 
+    /// <summary>
+    /// Create a coloured directory tree for first-occurrence searches.
+    /// </summary>
+    /// <param name="startDirectory">root of the directory tree.</param>
+    /// <param name="isColoured"><c>true</c> if the file being targeted has
+    /// been found, <c>false</c> otherwise.</param>
+    /// <param name="currentDepth">current depth of tree being coloured.</param>
+    /// <returns>A coloured directory tree that indicates entries where the
+    /// file isn't found, entries where the file is found, and entries in the
+    /// queue ready to be checked.</returns>
     private NTree<FileSystemInfo> ColourTree
         (DirectoryInfo startDirectory, ref bool isColoured, ref int currentDepth)
     {
@@ -157,6 +193,12 @@ public class BreadthFirstSearch
         return searchTree;
     }
     
+    /// <summary>
+    /// Create a coloured directory tree for all-occurrence searches.
+    /// </summary>
+    /// <param name="startDirectory">root of the directory tree.</param>
+    /// <returns>A coloured directory tree that indicates entries where the
+    /// file isn't found and entries where the file is found.</returns>
     private NTree<FileSystemInfo> ColourMultiTree(DirectoryInfo startDirectory)
     {
         var searchTree = new NTree<FileSystemInfo>(startDirectory, 0);
