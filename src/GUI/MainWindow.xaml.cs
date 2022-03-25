@@ -56,13 +56,8 @@ namespace GUI
                 if (btnBFS.IsChecked == true)
                 {
                     // BFS
-                    Stopwatch stopWatch = new Stopwatch();
-                    stopWatch.Start();
                     BreadthFirstSearch bfsSearch = new BreadthFirstSearch(Occurence);
                     (path, pohon, elapsedTime) = bfsSearch.BreadthSearchFile(diSource, fileName);
-                    stopWatch.Stop();
-                    elapsedTime = stopWatch.ElapsedMilliseconds;
-                    
                 }
                 else if (btnDFS.IsChecked == true)
                 {
